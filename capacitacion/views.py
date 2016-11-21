@@ -10,13 +10,12 @@ from rest_framework import generics
 
 
 def gato(request):
-    template = loader.get_template('capacitacion.html')
+    template = loader.get_template('capacitacion/modulo_registro.html')
     context = {
-        'gatos': '',
-        'title': ''
+        'titulo_padre': 'Capacitacion',
+        'titulo_hijo': 'Modulo de Registro'
     }
     return HttpResponse(template.render(context, request))
-
 
 # Create your views here.
 
@@ -57,7 +56,7 @@ class TbLocalAmbienteByUbigeoViewSet(generics.ListAPIView):
 
     def get_queryset(self):
         id_local = self.kwargs['id_local']
-        return Local.objects.filter(id_local=id_local)
+        return LocalAmbiente.objects.filter(id_local=id_local)
 
 
 class AmbienteViewSet(viewsets.ModelViewSet):
@@ -73,3 +72,11 @@ class LocalViewSet(viewsets.ModelViewSet):
 class LocalAmbienteViewSet(viewsets.ModelViewSet):
     queryset = LocalAmbiente.objects.all()
     serializer_class = LocalAmbienteSerializer
+
+
+class CursobyEtapaViewSet(generics.ListAPIView):
+    serializer_class = CursoSerializer
+
+    def get_queryset(self):
+        id_etapa = self.kwargs['id_etapa']
+        return Curso.objects.filter(id_etapa=id_etapa)

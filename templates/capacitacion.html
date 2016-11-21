@@ -24,6 +24,7 @@
     <!-- Theme JS files -->
     <script type="text/javascript" src="{% static "assets/js/plugins/tables/datatables/datatables.min.js" %}"></script>
     <script type="text/javascript" src="{% static "assets/js/plugins/forms/validation/validate.min.js" %}"></script>
+    <script type="text/javascript" src="{% static "assets/js/plugins/notifications/sweet_alert.min.js" %}"></script>
     <script type="text/javascript" src="{% static "assets/js/plugins/forms/selects/select2.min.js" %}"></script>
     <script type="text/javascript" src="{% static "assets/js/plugins/forms/styling/uniform.min.js" %}"></script>
     <script type="text/javascript" src="{% static "assets/js/plugins/ui/moment/moment.min.js" %}"></script>
@@ -37,7 +38,7 @@
 <!-- Main navbar -->
 <div class="navbar navbar-inverse bg-primary">
     <div class="navbar-header">
-        <a class="navbar-brand" href="index.html"><img src="{% static "assets/images/logo_light.png" %}" alt=""></a>
+        {#        <a class="navbar-brand" href="index.html"><img src="{% static "assets/images/logo_light.png" %}" alt=""></a>#}
         <ul class="nav navbar-nav visible-xs-block">
             <li><a data-toggle="collapse" data-target="#navbar-mobile"><i class="icon-tree5"></i></a></li>
             <li><a class="sidebar-mobile-main-toggle"><i class="icon-paragraph-justify3"></i></a></li>
@@ -232,7 +233,30 @@
                     </div>
                     <div class="panel-body">
                         <form class="form-validate-jquery" action="#">
+                            <input type="hidden" id="id_local">
                             <div id="localdata">
+                                <fieldset class="content-group">
+                                    <legend class="text-bold">Etapa y Curso</legend>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label>Etapa</label>
+                                                <select id="etapa" class="select" onchange="getCursos(this.value)">
+                                                    <option value="1">CENSO EXPERIMENTAL</option>
+                                                    <option value="2">Empadronamiento</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label>Cursos</label>
+                                                <select id="cursos" name="id_curso" class="select">
+                                                    <option value="">Seleccione</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </fieldset>
                                 <fieldset class="content-group">
                                     <legend class=" text-bold">Dirección</legend>
                                     <div class="row">
@@ -283,21 +307,21 @@
                                         <div class="col-md-2">
                                             <div class="form-group">
                                                 <label>MZ</label>
-                                                <input type="text" required="required" name="mz_direccion"
+                                                <input type="text" name="mz_direccion"
                                                        class="form-control" placeholder="">
                                             </div>
                                         </div>
                                         <div class="col-md-2">
                                             <div class="form-group">
                                                 <label>Lote</label>
-                                                <input type="text" required="required" name="lote_direccion"
+                                                <input type="text" name="lote_direccion"
                                                        class="form-control" placeholder="">
                                             </div>
                                         </div>
                                         <div class="col-md-2">
                                             <div class="form-group">
                                                 <label>KM</label>
-                                                <input type="text" required="required" name="km_direccion"
+                                                <input type="text" name="km_direccion"
                                                        class="form-control" placeholder="">
                                             </div>
                                         </div>
@@ -313,14 +337,14 @@
                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <label>Teléfono Fijo</label>
-                                                <input type="text" required="required" name="telefono_local_fijo"
+                                                <input type="text" name="telefono_local_fijo"
                                                        class="form-control" placeholder="">
                                             </div>
                                         </div>
                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <label>Teléfono Celular</label>
-                                                <input type="text" required="required" name="telefono_local_celular"
+                                                <input type="text" name="telefono_local_celular"
                                                        class="form-control" placeholder="">
                                             </div>
                                         </div>
@@ -383,14 +407,14 @@
                                         <div class="col-md-3">
                                             <div class="form-group">
                                                 <label>Teléfono Fijo</label>
-                                                <input type="text" required="required" name="funcionario_telefono"
+                                                <input type="text" name="funcionario_telefono"
                                                        class="form-control" placeholder="">
                                             </div>
                                         </div>
                                         <div class="col-md-3">
                                             <div class="form-group">
                                                 <label>Teléfono Celular</label>
-                                                <input type="text" required="required" name="funcionario_celular"
+                                                <input type="text" name="funcionario_celular"
                                                        class="form-control" placeholder="">
                                             </div>
                                         </div>
@@ -416,14 +440,14 @@
                                         <div class="col-md-3">
                                             <div class="form-group">
                                                 <label>Teléfono Fijo</label>
-                                                <input type="text" required="required" name="responsable_telefono"
+                                                <input type="text" name="responsable_telefono"
                                                        class="form-control" placeholder="">
                                             </div>
                                         </div>
                                         <div class="col-md-3">
                                             <div class="form-group">
                                                 <label>Teléfono Celular</label>
-                                                <input type="text" required="required" name="responsable_celular"
+                                                <input type="text" name="responsable_celular"
                                                        class="form-control" placeholder="">
                                             </div>
                                         </div>
@@ -441,12 +465,20 @@
                                             </label>
                                         </div>
                                     </div>
-                                    <div class="col-md-2">
+                                    <div class="col-md-1">
                                         <div class="form-group">
-                                            <label>Cantidad</label>
+                                            <label>Disponible</label>
                                             <input type="text" name="cantidad_disponible_aulas"
                                                    id="cantidad_disponible_aulas"
-                                                   class="form-control" placeholder="" disabled>
+                                                   class="form-control" value="0" readonly>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-1">
+                                        <div class="form-group">
+                                            <label>A usar</label>
+                                            <input type="text" name="cantidad_usar_aulas"
+                                                   id="cantidad_usar_aulas"
+                                                   class="form-control" value="0" readonly>
                                         </div>
                                     </div>
                                     <div class="col-md-2">
@@ -457,12 +489,20 @@
                                             </label>
                                         </div>
                                     </div>
-                                    <div class="col-md-2">
+                                    <div class="col-md-1">
                                         <div class="form-group">
-                                            <label>Cantidad</label>
+                                            <label>Disponible</label>
                                             <input type="text" name="cantidad_disponible_auditorios"
                                                    id="cantidad_disponible_auditorios"
-                                                   class="form-control" placeholder="" disabled>
+                                                   class="form-control" value="0" readonly>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-1">
+                                        <div class="form-group">
+                                            <label>A usar</label>
+                                            <input type="text" name="cantidad_usar_auditorios"
+                                                   id="cantidad_usar_auditorios"
+                                                   class="form-control" value="0" readonly>
                                         </div>
                                     </div>
                                     <div class="col-md-2">
@@ -473,13 +513,22 @@
                                             </label>
                                         </div>
                                     </div>
-                                    <div class="col-md-2">
+                                    <div class="col-md-1">
                                         <div class="form-group">
-                                            <label>Cantidad</label>
+                                            <label>Disponible</label>
                                             <input type="text"
                                                    name="cantidad_disponible_sala" class="form-control"
                                                    id="cantidad_disponible_sala"
-                                                   placeholder="" disabled>
+                                                   value="0" readonly>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-1">
+                                        <div class="form-group">
+                                            <label>A usar</label>
+                                            <input type="text"
+                                                   name="cantidad_usar_sala" class="form-control"
+                                                   id="cantidad_usar_sala"
+                                                   value="0" readonly>
                                         </div>
                                     </div>
                                 </div>
@@ -492,12 +541,20 @@
                                             </label>
                                         </div>
                                     </div>
-                                    <div class="col-md-2">
+                                    <div class="col-md-1">
                                         <div class="form-group">
-                                            <label>Cantidad</label>
+                                            <label>Disponible</label>
                                             <input type="text" name="cantidad_disponible_oficina"
                                                    id="cantidad_disponible_oficina"
-                                                   class="form-control" placeholder="" disabled>
+                                                   class="form-control" value="0" readonly>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-1">
+                                        <div class="form-group">
+                                            <label>A usar</label>
+                                            <input type="text" name="cantidad_usar_oficina"
+                                                   id="cantidad_usar_oficina"
+                                                   class="form-control" value="0" readonly>
                                         </div>
                                     </div>
                                     <div class="col-md-2">
@@ -508,22 +565,37 @@
                                             </label>
                                         </div>
                                     </div>
-                                    <div class="col-md-2">
+                                    <div class="col-md-1">
                                         <div class="form-group">
-                                            <label>Especifique</label>
+                                            <label>Disponible</label>
                                             <input type="text" name="cantidad_disponible_otros"
                                                    id="cantidad_disponible_otros"
-                                                   class="form-control" placeholder="" disabled>
+                                                   class="form-control" value="0" readonly>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-1">
+                                        <div class="form-group">
+                                            <label>A usar</label>
+                                            <input type="text" name="cantidad_usar_otros"
+                                                   id="cantidad_usar_otros"
+                                                   class="form-control" value="0" readonly>
                                         </div>
                                     </div>
                                 </div>
                             </fieldset>
-                            <div class="text-right">
-                                <button type="reset" class="btn btn-default" id="reset">Reset <i
-                                        class="icon-reload-alt position-right"></i></button>
-                                <button type="button" id="registrar" class="btn btn-primary">Registrar <i
-                                        class="icon-arrow-right14 position-right"></i></button>
+                            <div class="row">
+                                <div class="text-left">
+                                    <button type="reset" class="btn btn-default" id="reset">Limpiar <i
+                                            class="icon-reload-alt position-right"></i></button>
+                                    <button type="button" id="registrar" class="btn btn-primary">Registrar <i
+                                            class="icon-arrow-right14 position-right"></i></button>
+                                    <button type="button" id="registrar_aulas" disabled class="btn btn-primary">
+                                        Registrar
+                                        Aulas <i
+                                            class="icon-arrow-right14 position-right"></i></button>
+                                </div>
                             </div>
+
                         </form>
                     </div>
                 </div>
@@ -571,345 +643,5 @@
 </div>
 <!-- /page container -->
 </body>
-<script>
-    BASE_URL = `http://localhost:8000/`;
-    $(function () {
-        $('.select').select2();
-        $(".styled, .multiselect-container input").uniform({
-            radioClass: 'choice'
-        });
-
-        $('.daterange-single').daterangepicker({
-            singleDatePicker: true,
-        });
-        getDepartamentos();
-    })
-    $('#departamentos').change(function () {
-        $('#provincias').find('option').remove();
-        getProvincias();
-    });
-
-    $('#provincias').change(function () {
-        $("#distritos").find('option').remove();
-        getDistritos();
-    })
-    $('#buscarlocal').click(function () {
-        getLocalesbyUbigeo();
-    })
-
-    function getDepartamentos() {
-        let array_departamentos = []
-        $.getJSON(`${BASE_URL}departamentos`, function (data) {
-            $.each(data, function (key, val) {
-                array_departamentos.push({id: val.ccdd, text: val.departamento})
-            });
-            console.log(array_departamentos);
-            $('#departamentos').select2({data: array_departamentos});
-        });
-    }
-    function getProvincias() {
-        let array_provincias = [];
-        var ccdd = $('#departamentos').val();
-        $.getJSON(`${BASE_URL}provincias/${ccdd}`, function (data) {
-            $.each(data, function (key, val) {
-                array_provincias.push({id: val.ccpp, text: val.provincia})
-            });
-            console.log(array_provincias);
-            $('#provincias').select2({data: array_provincias});
-        });
-    }
-
-    function getDistritos() {
-        let array_distritos = [];
-        var ccdd = $('#departamentos').val();
-        var ccpp = $('#provincias').val();
-        $.getJSON(`${BASE_URL}distritos/${ccdd}/${ccpp}`, function (data) {
-            $.each(data, function (key, val) {
-                array_distritos.push({id: val.ccdi, text: val.distrito})
-            });
-            $('#distritos').select2({data: array_distritos});
-        });
-    }
-
-    function getLocalesbyUbigeo() {
-        var ubigeo = `${$('#departamentos').val()}${$('#provincias').val()}${$('#distritos').val()}`;
-        $.ajax({
-            async:false,
-            url: `${BASE_URL}localubigeo/${ubigeo}`,
-            success: function (data) {
-                $.each(data, function (key, val) {
-                    $('#table_localesubigeo').find('tbody').html(`<tr>
-                        <td>${val.nombre_local}</td><td>${val.nombre_via}</td><td>${val.referencia}</td><td><button click=getLocal(${val.id_local})>Editar</button></td>
-                        </tr>`)
-                });
-                $('#table_localesubigeo').DataTable()
-            }
-        })
-    }
-    function getLocal(id_local){
-        $.ajax({
-            url:`${BASE_URL}rest/local/${id_local}`,
-            success: function(data){
-                $.each(data,function(key,val){
-                    if(key=='tipo_via' || key == 'turno_uso_local'){
-                        console.log($(`select[name=${key}]`).val(val).trigger('change'))
-                    }else{
-                        console.log($(`input[name=${key}]`).val(val))
-                    }
-
-
-                })
-            }
-        })
-    }
-
-    var validator = $(".form-validate-jquery").validate({
-        ignore: 'input[type=hidden], .select2-search__field', // ignore hidden fields
-        errorClass: 'validation-error-label',
-        successClass: 'validation-valid-label',
-        highlight: function (element, errorClass) {
-            $(element).removeClass(errorClass);
-        },
-        unhighlight: function (element, errorClass) {
-            $(element).removeClass(errorClass);
-        },
-
-        // Different components require proper error label placement
-        errorPlacement: function (error, element) {
-
-            // Styled checkboxes, radios, bootstrap switch
-            if (element.parents('div').hasClass("checker") || element.parents('div').hasClass("choice") || element.parent().hasClass('bootstrap-switch-container')) {
-                if (element.parents('label').hasClass('checkbox-inline') || element.parents('label').hasClass('radio-inline')) {
-                    error.appendTo(element.parent().parent().parent().parent());
-                } else {
-                    error.appendTo(element.parent().parent().parent().parent().parent());
-                }
-            }
-
-            // Unstyled checkboxes, radios
-            else if (element.parents('div').hasClass('checkbox') || element.parents('div').hasClass('radio')) {
-                error.appendTo(element.parent().parent().parent());
-            }
-
-            // Input with icons and Select2
-            else if (element.parents('div').hasClass('has-feedback') || element.hasClass('select2-hidden-accessible')) {
-                error.appendTo(element.parent());
-            }
-
-            // Inline checkboxes, radios
-            else if (element.parents('label').hasClass('checkbox-inline') || element.parents('label').hasClass('radio-inline')) {
-                error.appendTo(element.parent().parent());
-            }
-
-            // Input group, styled file input
-            else if (element.parent().hasClass('uploader') || element.parents().hasClass('input-group')) {
-                error.appendTo(element.parent().parent());
-            } else {
-                error.insertAfter(element);
-            }
-        },
-        validClass: "validation-valid-label",
-        success: function (label) {
-            label.addClass("validation-valid-label").text("Success.")
-        },
-        rules: {
-            nombre_local: {
-                minlength: 10
-            },
-            nombre_via: {
-                minlength: 10
-            },
-            referencia: {
-                minlength: 10
-            },
-            n_direccion: {
-                range: [1, 200]
-            },
-            km_direccion: {
-                range: [1, 90]
-            },
-            mz_direccion: {
-                range: [1, 200]
-            },
-            lote_direccion: {
-                range: [1, 200]
-            },
-            piso_direccion: {
-                range: [1, 4]
-            },
-            telefono_local_fijo: {
-                minlength: 7,
-                maxlength: 7
-            },
-            telefono_local_celular: {
-                minlength: 9,
-                maxlength: 9
-            },
-            capacidad_local: {
-                range: [1, 9999]
-            },
-            funcionario_nombre: {
-                minlength: 9,
-            },
-            funcionario_email: {
-                email: true
-            },
-            funcionario_telefono: {
-                minlength: 7,
-                maxlength: 7
-            },
-            funcionario_celular: {
-                minlength: 9,
-                maxlength: 9
-            },
-            responsable_nombre: {
-                minlength: 9,
-            },
-            responsable_email: {
-                email: true
-            },
-            responsable_telefono: {
-                minlength: 7,
-                maxlength: 7
-            },
-            responsable_celular: {
-                minlength: 9,
-                maxlength: 9
-            },
-        },
-        messages: {
-            custom: {
-                required: "El campo es requerido",
-            },
-            agree: "Please accept our policy"
-        }
-    });
-    $('#reset').on('click', function () {
-        validator.resetForm();
-    });
-
-    $('#registrar').on('click', function (e) {
-        validator.form()
-        if (validator.numberOfInvalids() == 0) {
-            let data = $('#localdata :input').serializeArray();
-            let datapost = {}
-            var array_ambientes = []
-            $.each(data, function (key, val) {
-                datapost[val.name] = val.value
-            });
-            datapost['ubigeo'] = `${$('#departamentos').val()}${$('#provincias').val()}${$('#distritos').val()}`;
-            datapost['id_curso'] = '1';
-            console.log(datapost);
-            $.ajax({
-                async: false,
-                method: 'POST',
-                data: datapost,
-                url: `${BASE_URL}rest/local/`,
-                success: function (data) {
-                    var ambientes = $('#ambientesdata').serializeArray();
-                    array_ambientes = [
-                        {
-                            id_local: data.id_local,
-                            cantidad_disponible: ambientes[0].value,
-                            id_ambiente: 1,
-                            cantidad_utilizar: ambientes[0].value
-                        },
-                        {
-                            id_local: data.id_local,
-                            cantidad_disponible: ambientes[1].value,
-                            id_ambiente: 2,
-                            cantidad_utilizar: ambientes[1].value
-                        },
-                        {
-                            id_local: data.id_local,
-                            cantidad_disponible: ambientes[2].value,
-                            id_ambiente: 3,
-                            cantidad_utilizar: ambientes[2].value
-                        },
-                        {
-                            id_local: data.id_local,
-                            cantidad_disponible: ambientes[3].value,
-                            id_ambiente: 4,
-                            cantidad_utilizar: ambientes[3].value
-                        },
-                        {
-                            id_local: data.id_local,
-                            cantidad_disponible: ambientes[4].value,
-                            id_ambiente: 5,
-                            cantidad_utilizar: ambientes[4].value
-                        },
-                    ];
-                }
-            });
-            for (let k in array_ambientes) {
-                $.ajax({
-                    method: 'POST',
-                    data: array_ambientes[k],
-                    url: `${BASE_URL}rest/localambiente/`,
-                    success: function (data) {
-                        console.log(data);
-                    }
-                })
-            }
-        }
-    });
-
-    $('#aula').change(function () {
-        if ($(this).is(':checked')) {
-            $('#cantidad_disponible_aulas').prop('disabled', false);
-            $('#cantidad_disponible_aulas').prop('required', true);
-        } else {
-            $('#cantidad_disponible_aulas').prop('disabled', true);
-            $('#cantidad_disponible_aulas').val("0");
-            $('#cantidad_disponible_aulas').prop('required', false);
-        }
-        $.uniform.update();
-    })
-    $('#auditorio').change(function () {
-        if ($(this).is(':checked')) {
-            $('#cantidad_disponible_auditorios').prop('disabled', false);
-            $('#cantidad_disponible_auditorios').prop('required', true);
-        } else {
-            $('#cantidad_disponible_auditorios').prop('disabled', true);
-            $('#cantidad_disponible_auditorios').val("0");
-            $('#cantidad_disponible_auditorios').prop('required', false);
-        }
-        $.uniform.update();
-    })
-    $('#oficina').change(function () {
-        if ($(this).is(':checked')) {
-            $('#cantidad_disponible_oficina').prop('disabled', false);
-            $('#cantidad_disponible_oficina').prop('required', true);
-        } else {
-            $('#cantidad_disponible_oficina').prop('disabled', true);
-            $('#cantidad_disponible_oficina').val("0");
-            $('#cantidad_disponible_oficina').prop('required', false);
-        }
-        $.uniform.update();
-    })
-    $('#sala').change(function () {
-        if ($(this).is(':checked')) {
-            $('#cantidad_disponible_sala').prop('disabled', false);
-            $('#cantidad_disponible_sala').prop('required', true);
-        } else {
-            $('#cantidad_disponible_sala').prop('disabled', true);
-            $('#cantidad_disponible_sala').val("0");
-            $('#cantidad_disponible_sala').prop('required', false);
-        }
-        $.uniform.update();
-    })
-    $('#otros').change(function () {
-        if ($(this).is(':checked')) {
-            $('#cantidad_disponible_otros').prop('disabled', false);
-            $('#cantidad_disponible_otros').prop('required', true);
-        } else {
-            $('#cantidad_disponible_otros').prop('disabled', true);
-            $('#cantidad_disponible_otros').val("0");
-            $('#cantidad_disponible_otros').prop('required', false);
-        }
-        $.uniform.update();
-    })
-
-</script>
 
 </html>

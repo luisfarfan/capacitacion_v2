@@ -32,7 +32,7 @@ class Curso(models.Model):
     id_curso = models.AutoField(primary_key=True, db_column='id_curso')
     cod_curso = models.CharField(max_length=3, blank=True, null=True)
     nombre_curso = models.CharField(max_length=100, blank=True, null=True)
-    etapa = models.ForeignKey('Etapa', db_column='id_etapa')
+    id_etapa = models.ForeignKey('Etapa', db_column='id_etapa')
     funcionarios = models.ManyToManyField('Funcionario', through='CursoFuncionario')
 
     class Meta:

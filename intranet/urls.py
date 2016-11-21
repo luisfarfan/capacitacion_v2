@@ -28,5 +28,6 @@ urlpatterns = [
         DistritosList.as_view()),
     url('^localubigeo/(?P<ubigeo>.+)/$', TbLocalByUbigeoViewSet.as_view()),
     url('^localambienteubigeo/(?P<id_local>.+)/$', TbLocalAmbienteByUbigeoViewSet.as_view()),
+    url('^cursobyetapa/(?P<id_etapa>.+)/$', CursobyEtapaViewSet.as_view()),
 
 ]

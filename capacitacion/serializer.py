@@ -11,6 +11,12 @@ class LocalSerializer(serializers.ModelSerializer):
     class Meta:
         model = Local
 
+
 class LocalAmbienteSerializer(serializers.ModelSerializer):
     class Meta:
         model = LocalAmbiente
+
+
+class CursoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Curso
