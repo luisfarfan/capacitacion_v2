@@ -17,6 +17,7 @@ def gato(request):
     }
     return HttpResponse(template.render(context, request))
 
+
 # Create your views here.
 
 class DepartamentosList(APIView):
@@ -51,12 +52,21 @@ class TbLocalByUbigeoViewSet(generics.ListAPIView):
         return Local.objects.filter(ubigeo=ubigeo)
 
 
-class TbLocalAmbienteByUbigeoViewSet(generics.ListAPIView):
+class TbLocalAmbienteByLocalViewSet(generics.ListAPIView):
     serializer_class = LocalAmbienteSerializer
 
     def get_queryset(self):
         id_local = self.kwargs['id_local']
         return LocalAmbiente.objects.filter(id_local=id_local)
+
+
+class LocalAmbienteByLocalAulaViewSet(generics.ListAPIView):
+    serializer_class = LocalAmbienteSerializer
+
+    def get_queryset(self):
+        id_local = self.kwargs['id_local']
+        id_ambiente = self.kwargs['id_ambiente']
+        return LocalAmbiente.objects.filter(id_local=id_local, id_ambiente=id_ambiente)
 
 
 class AmbienteViewSet(viewsets.ModelViewSet):

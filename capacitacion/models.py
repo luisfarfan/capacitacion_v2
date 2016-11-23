@@ -74,8 +74,6 @@ class LocalAmbiente(models.Model):
     id_localambiente = models.AutoField(primary_key=True, db_column='id_localambiente')
     id_local = models.ForeignKey('Local')
     id_ambiente = models.ForeignKey('Ambiente')
-    cantidad_disponible = models.IntegerField()
-    cantidad_utilizar = models.IntegerField()
     mesas_cant = models.IntegerField(blank=True, null=True)
     sillas_cant = models.IntegerField(blank=True, null=True)
     carpindividuales_cant = models.IntegerField(blank=True, null=True)
@@ -87,12 +85,14 @@ class LocalAmbiente(models.Model):
     puerta_pestillocandado = models.IntegerField(blank=True, null=True)
     puerta_notiene = models.IntegerField(blank=True, null=True)
     sshh = models.IntegerField(blank=True, null=True)
-    alumbrado = models.IntegerField(blank=True, null=True)
+    alumbrado_electrico = models.IntegerField(blank=True, null=True)
     pizarra_acrilica = models.IntegerField(blank=True, null=True)
     pizarra_cemento = models.IntegerField(blank=True, null=True)
     proyector = models.IntegerField(blank=True, null=True)
     computadora = models.IntegerField(blank=True, null=True)
     acceso_internet = models.IntegerField(blank=True, null=True)
+    aireacondicionado = models.IntegerField(blank=True, null=True)
+    ventiladores = models.IntegerField(blank=True, null=True)
 
     class Meta:
         managed = True
@@ -127,6 +127,19 @@ class Local(models.Model):
     responsable_email = models.CharField(max_length=100, blank=True, null=True)
     responsable_telefono = models.CharField(max_length=100, blank=True, null=True)
     responsable_celular = models.CharField(max_length=100, blank=True, null=True)
+
+    cantidad_disponible_aulas = models.IntegerField(blank=True, null=True)
+    cantidad_usar_aulas = models.IntegerField(blank=True, null=True)
+    cantidad_disponible_auditorios = models.IntegerField(blank=True, null=True)
+    cantidad_usar_auditorios = models.IntegerField(blank=True, null=True)
+    cantidad_disponible_sala = models.IntegerField(blank=True, null=True)
+    cantidad_usar_sala = models.IntegerField(blank=True, null=True)
+    cantidad_disponible_oficina = models.IntegerField(blank=True, null=True)
+    cantidad_usar_oficina = models.IntegerField(blank=True, null=True)
+    cantidad_disponible_otros = models.IntegerField(blank=True, null=True)
+    cantidad_usar_otros = models.IntegerField(blank=True, null=True)
+
+
 
     class Meta:
         managed = True

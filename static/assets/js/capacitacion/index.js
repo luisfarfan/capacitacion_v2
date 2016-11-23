@@ -1,8 +1,27 @@
 /**
  * Created by LFarfan on 21/11/2016.
  */
-BASE_URL = `http://localhost:8000/`;
+BASE_URL = `http://192.168.200.123:3000/`;
 $(function () {
+    jQuery.extend(jQuery.validator.messages, {
+        required: "Este campo es obligatorio.",
+        remote: "Por favor, rellena este campo.",
+        email: "Por favor, escribe una dirección de correo válida",
+        url: "Por favor, escribe una URL válida.",
+        date: "Por favor, escribe una fecha válida.",
+        dateISO: "Por favor, escribe una fecha (ISO) válida.",
+        number: "Por favor, escribe un número entero válido.",
+        digits: "Por favor, escribe sólo dígitos.",
+        creditcard: "Por favor, escribe un número de tarjeta válido.",
+        equalTo: "Por favor, escribe el mismo valor de nuevo.",
+        accept: "Por favor, escribe un valor con una extensión aceptada.",
+        maxlength: jQuery.validator.format("Por favor, no escribas más de {0} caracteres."),
+        minlength: jQuery.validator.format("Por favor, no escribas menos de {0} caracteres."),
+        rangelength: jQuery.validator.format("Por favor, escribe un valor entre {0} y {1} caracteres."),
+        range: jQuery.validator.format("Por favor, escribe un valor entre {0} y {1}."),
+        max: jQuery.validator.format("Por favor, escribe un valor menor o igual a {0}."),
+        min: jQuery.validator.format("Por favor, escribe un valor mayor o igual a {0}.")
+    });
     $('.select').select2();
     $(".styled, .multiselect-container input").uniform({
         radioClass: 'choice'
@@ -67,10 +86,12 @@ function getLocalesbyUbigeo() {
         async: false,
         url: `${BASE_URL}localubigeo/${ubigeo}`,
         success: function (data) {
-            console.log(data)
+            console.log(data);
             var html = '';
             $.each(data, function (key, val) {
-                html += `<tr><td>${val.nombre_local}</td><td>${val.nombre_via}</td><td>${val.referencia}</td><td><button onclick=getLocal(${val.id_local})>Editar</button></td></tr>`;
+                html += `<tr><td>${val.nombre_local}</td><td>${val.nombre_via}</td><td>${val.referencia}</td><td>
+                    <button onclick=getLocal(${val.id_local}) type=button class='btn btn-info btn-float btn-rounded btn-loading' data-loading-text="<i class='icon-spinner4 spinner'></i>">
+                    <i class="icon-spinner4"></i></button></button></td></tr>`;
             });
             console.log(html);
             $('#table_localesubigeo').find('tbody').html(html);
@@ -84,81 +105,80 @@ function getLocal(id_local) {
     $.ajax({
         url: `${BASE_URL}rest/local/${id_local}`,
         success: function (data) {
+            console.log(data);
             $.each(data, function (key, val) {
                 if (key == 'tipo_via' || key == 'turno_uso_local' || key == 'id_curso') {
                     $(`select[name=${key}]`).val(val).trigger('change')
                 } else {
                     $(`input[name=${key}]`).val(val)
                 }
-            })
-        }
-    });
-    $.ajax({
-        url: `${BASE_URL}localambienteubigeo/${id_local}`,
-        success: function (data) {
-            if (data[0].cantidad_disponible == 0) {
-                $('#cantidad_disponible_aulas').val(data[0].cantidad_disponible);
-                $('#cantidad_usar_aulas').val(data[0].cantidad_utilizar);
+            });
+            if (data.cantidad_disponible_aulas == 0) {
+                $('#cantidad_disponible_aulas').val(data.cantidad_disponible_aulas);
+                $('#cantidad_usar_aulas').val(data.cantidad_usar_aulas);
                 $('#aula').prop('checked', false);
                 $.uniform.update();
             } else {
-                $('#cantidad_disponible_aulas').val(data[0].cantidad_disponible);
-                $('#cantidad_usar_aulas').val(data[0].cantidad_utilizar);
+                $('#cantidad_disponible_aulas').val(data.cantidad_disponible_aulas);
+                $('#cantidad_usar_aulas').val(data.cantidad_usar_aulas);
                 $('#aula').prop('checked', true);
                 $.uniform.update();
             }
 
-            if (data[1].cantidad_disponible == 0) {
-                $('#cantidad_disponible_auditorios').val(data[1].cantidad_disponible);
-                $('#cantidad_usar_auditorios').val(data[1].cantidad_utilizar);
+            if (data.cantidad_disponible_auditorios == 0) {
+                $('#cantidad_disponible_auditorios').val(data.cantidad_disponible_auditorios);
+                $('#cantidad_usar_auditorios').val(data.cantidad_usar_auditorios);
                 $('#auditorio').prop('checked', false);
                 $.uniform.update();
             } else {
-                $('#cantidad_disponible_auditorios').val(data[1].cantidad_disponible);
-                $('#cantidad_usar_auditorios').val(data[1].cantidad_utilizar);
+                $('#cantidad_disponible_auditorios').val(data.cantidad_disponible_auditorios);
+                $('#cantidad_usar_auditorios').val(data.cantidad_usar_auditorios);
                 $('#auditorio').prop('checked', true);
                 $.uniform.update();
             }
 
-            if (data[2].cantidad_disponible == 0) {
-                $('#cantidad_disponible_sala').val(data[2].cantidad_disponible);
-                $('#cantidad_usar_sala').val(data[2].cantidad_utilizar);
+            if (data.cantidad_disponible_sala == 0) {
+                $('#cantidad_disponible_sala').val(data.cantidad_disponible_sala);
+                $('#cantidad_usar_sala').val(data.cantidad_usar_sala);
                 $('#sala').prop('checked', false);
                 $.uniform.update();
             } else {
-                $('#cantidad_disponible_sala').val(data[2].cantidad_disponible);
-                $('#cantidad_usar_sala').val(data[2].cantidad_utilizar);
+                $('#cantidad_disponible_sala').val(data.cantidad_disponible_sala);
+                $('#cantidad_usar_sala').val(data.cantidad_usar_sala);
                 $('#sala').prop('checked', true);
                 $.uniform.update();
             }
 
-            if (data[3].cantidad_disponible == 0) {
-                $('#cantidad_disponible_oficina').val(data[3].cantidad_disponible);
-                $('#cantidad_usar_oficina').val(data[3].cantidad_utilizar);
+            if (data.cantidad_disponible_oficina == 0) {
+                $('#cantidad_disponible_oficina').val(data.cantidad_disponible_oficina);
+                $('#cantidad_usar_oficina').val(data.cantidad_usar_oficina);
                 $('#oficina').prop('checked', false);
                 $.uniform.update();
             } else {
-                $('#cantidad_disponible_oficina').val(data[3].cantidad_disponible);
-                $('#cantidad_usar_oficina').val(data[3].cantidad_utilizar);
+                $('#cantidad_disponible_oficina').val(data.cantidad_disponible_oficina);
+                $('#cantidad_usar_oficina').val(data.cantidad_usar_oficina);
                 $('#oficina').prop('checked', true);
                 $.uniform.update();
             }
 
-            if (data[4].cantidad_disponible == 0) {
-                $('#cantidad_disponible_otros').val(data[4].cantidad_disponible);
-                $('#cantidad_usar_otros').val(data[4].cantidad_utilizar);
+            if (data.cantidad_disponible_otros == 0) {
+                $('#cantidad_disponible_otros').val(data.cantidad_disponible_otros);
+                $('#cantidad_usar_otros').val(data.cantidad_usar_otros);
                 $('#otros').prop('checked', false);
                 $.uniform.update();
             } else {
-                $('#cantidad_disponible_otros').val(data[4].cantidad_disponible);
-                $('#cantidad_usar_otros').val(data[4].cantidad_utilizar);
+                $('#cantidad_disponible_otros').val(data.cantidad_disponible_otros);
+                $('#cantidad_usar_otros').val(data.cantidad_usar_otros);
                 $('#otros').prop('checked', true);
                 $.uniform.update();
             }
 
-            $('#registrar_aulas').prop('disabled', false)
+            $('#registrar_aulas_modal').prop('disabled', false);
+            $('#modal_localesbyubigeo').modal('hide');
         }
     });
+
+
 }
 function getCursos(id_etapa) {
     $('#cursos').find('option').remove();
@@ -346,11 +366,29 @@ var validator = $(".form-validate-jquery").validate({
 });
 $('#reset').on('click', function () {
     validator.resetForm();
+    $.uniform.update();
+    $('#id_local').val('');
 });
 
-$('#registrar').on('click', function (e) {
-
+$('#registrar').on('click', function () {
     validator.form();
+    let url = '';
+    let method = '';
+    let title = '';
+    let text = '';
+    if ($('#id_local').val() != '') {
+        url = `${BASE_URL}rest/local/${$('#id_local').val()}/`;
+        method = 'PUT';
+        title = 'Edición!';
+        text = 'El Local se ha editado con exito!';
+        title_entry = 'Esta usted seguro de Editar el Local?'
+    } else {
+        url = `${BASE_URL}rest/local/`;
+        method = 'POST';
+        title = 'Agregado!';
+        text = 'El Local se ha Agregado con exito!';
+        title_entry = 'Esta usted seguro de Agregar el Local?'
+    }
     if (validator.numberOfInvalids() == 0) {
         swal({
                 title: "Esta usted seguro de Agregar el Local?",
@@ -358,79 +396,37 @@ $('#registrar').on('click', function (e) {
                 type: "success",
                 showCancelButton: true,
                 confirmButtonColor: "#EF5350",
-                confirmButtonText: "Si, Agregar!",
+                confirmButtonText: "Si!",
                 cancelButtonText: "No, Cancelar!",
                 closeOnConfirm: false,
                 closeOnCancel: false
             },
             function (isConfirm) {
+
                 if (isConfirm) {
-                    swal({
-                        title: "Agregado!",
-                        text: "El Local ha sido registrado",
-                        confirmButtonColor: "#66BB6A",
-                        type: "success"
-                    });
-                    let data = $('#localdata :input').serializeArray();
+                    let data = $('#form_local').serializeArray();
                     let datapost = {};
                     var array_ambientes = [];
                     $.each(data, function (key, val) {
-                        datapost[val.name] = val.value
+                        datapost[val.name] = val.value;
                     });
                     datapost['ubigeo'] = `${$('#departamentos').val()}${$('#provincias').val()}${$('#distritos').val()}`;
+
                     $.ajax({
-                        async: false,
-                        method: 'POST',
+                        method: method,
                         data: datapost,
-                        url: `${BASE_URL}rest/local/`,
+                        url: url,
                         success: function (data) {
-                            var ambientes = $('#ambientesdata :input').serializeArray();
-                            array_ambientes = [
-                                {
-                                    id_local: data.id_local,
-                                    cantidad_disponible: ambientes[0].value,
-                                    id_ambiente: 1,
-                                    cantidad_utilizar: ambientes[1].value
-                                },
-                                {
-                                    id_local: data.id_local,
-                                    cantidad_disponible: ambientes[2].value,
-                                    id_ambiente: 2,
-                                    cantidad_utilizar: ambientes[3].value
-                                },
-                                {
-                                    id_local: data.id_local,
-                                    cantidad_disponible: ambientes[4].value,
-                                    id_ambiente: 3,
-                                    cantidad_utilizar: ambientes[5].value
-                                },
-                                {
-                                    id_local: data.id_local,
-                                    cantidad_disponible: ambientes[6].value,
-                                    id_ambiente: 4,
-                                    cantidad_utilizar: ambientes[7].value
-                                },
-                                {
-                                    id_local: data.id_local,
-                                    cantidad_disponible: ambientes[8].value,
-                                    id_ambiente: 5,
-                                    cantidad_utilizar: ambientes[9].value
-                                },
-                            ];
+                            swal({
+                                title: title,
+                                text: text,
+                                confirmButtonColor: "#66BB6A",
+                                type: "success"
+                            });
+                            validator.resetForm();
+                            $.uniform.update();
                         }
                     });
-                    console.log(array_ambientes);
-                    for (let k in array_ambientes) {
-                        $.ajax({
-                            method: 'POST',
-                            data: array_ambientes[k],
-                            url: `${BASE_URL}rest/localambiente/`,
-                            success: function (data) {
-                                console.log(data);
-                                validator.resetForm();
-                            }
-                        })
-                    }
                 }
                 else {
                     swal({
@@ -442,7 +438,6 @@ $('#registrar').on('click', function (e) {
                 }
             });
     }
-
 });
 
 $('#aula').change(function () {
