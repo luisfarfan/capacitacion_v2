@@ -1,7 +1,18 @@
 /**
  * Created by LFarfan on 21/11/2016.
  */
+//BASE_URL = `http://localhost:8000/`;
 BASE_URL = `http://192.168.200.123:3000/`;
+function resetForm(idform) {
+    "use strict";
+    $('#' + idform + ' :input').map(function () {
+        $(this).val('')
+    });
+    $('#' + idform + ' :input[type="checkbox"]').map(function () {
+        $(this).prop('checked', false);
+        $.uniform.update();
+    });
+}
 $(function () {
     jQuery.extend(jQuery.validator.messages, {
         required: "Este campo es obligatorio.",
@@ -276,7 +287,7 @@ var validator = $(".form-validate-jquery").validate({
             maxlength: 100
         },
         nombre_via: {
-            maxlength: 35
+            maxlength: 200
         },
         referencia: {
             maxlength: 100
@@ -365,8 +376,7 @@ var validator = $(".form-validate-jquery").validate({
     }
 });
 $('#reset').on('click', function () {
-    validator.resetForm();
-    $.uniform.update();
+    resetForm('form_local');
     $('#id_local').val('');
 });
 
@@ -402,7 +412,8 @@ $('#registrar').on('click', function () {
                 closeOnCancel: false
             },
             function (isConfirm) {
-
+                window.onkeydown = null;
+                window.onfocus = null;
                 if (isConfirm) {
                     let data = $('#form_local').serializeArray();
                     let datapost = {};
@@ -423,8 +434,8 @@ $('#registrar').on('click', function () {
                                 confirmButtonColor: "#66BB6A",
                                 type: "success"
                             });
+                            resetForm('form_local');
                             validator.resetForm();
-                            $.uniform.update();
                         }
                     });
                 }

@@ -1,7 +1,6 @@
 {% extends "base/base.html" %}
 
 {% load staticfiles %}
-
 {% block title %}
     Modulo de Registro de Local y Aulas
 {% endblock %}
@@ -141,8 +140,16 @@
                             <div class="col-md-3">
                                 <div class="form-group">
                                     <label>Nombre de Via (Dirección)</label>
-                                    <input type="text" required="required" name="nombre_via"
-                                           class="form-control" placeholder="">
+                                    <div class="input-group">
+												<span class="input-group-btn">
+													<button id="abrir_mapa" class="btn btn-default btn-icon legitRipple"
+                                                            type="button"><i class="glyphicon glyphicon-map-marker"></i></button>
+												</span>
+                                        <input type="text" required="required" name="nombre_via"
+                                               class="form-control" placeholder="">
+                                    </div>
+
+
                                 </div>
                             </div>
                             <div class="col-md-3">
@@ -484,11 +491,6 @@
                         </tbody>
                     </table>
                 </div>
-
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-link" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
-                </div>
             </div>
         </div>
     </div>
@@ -502,6 +504,9 @@
                 </div>
 
                 <div class="modal-body">
+                    <div id="msg_error" class="alert alert-warning" style="display: none;">No se puede agregar mas
+                        ambientes de los que se puede usar
+                    </div>
                     <form id="form_aula" class="form-validate-aula" action="#">
                         <fieldset class="content-group">
                             <legend>Ambiente</legend>
@@ -509,13 +514,13 @@
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label>Ambiente</label>
-                                        <select name="id_ambiente" class="select2" id="id_ambiente"></select>
+                                        <select name="id_ambiente" class="select2 select2 form-control" id="id_ambiente"></select>
                                     </div>
                                 </div>
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label>N°</label>
-                                        <input type="number" name="numero" class="form-control" required placeholder="">
+                                        <input type="text" name="numero" class="form-control" required placeholder="">
                                     </div>
                                 </div>
                                 <div class="col-md-3">
@@ -572,7 +577,7 @@
                                 <div class="col-md-4">
                                     <div class="checkbox">
                                         <label>
-                                            <input type="checkbox" name="puerta_chapa" id="aula" class="styled">
+                                            <input type="checkbox" name="puerta_chapa" class="styled">
                                             Puerta con Chapa
                                         </label>
                                     </div>
@@ -580,7 +585,7 @@
                                 <div class="col-md-4">
                                     <div class="checkbox">
                                         <label>
-                                            <input type="checkbox" name="puerta_pestillocandado" id="aula"
+                                            <input type="checkbox" name="puerta_pestillocandado"
                                                    class="styled">
                                             Pestillo y Candado
                                         </label>
@@ -589,7 +594,7 @@
                                 <div class="col-md-4">
                                     <div class="checkbox">
                                         <label>
-                                            <input type="checkbox" name="puerta_notiene" id="aula" class="styled">
+                                            <input type="checkbox" name="puerta_notiene" class="styled">
                                             No Tiene
                                         </label>
                                     </div>
@@ -599,7 +604,7 @@
                                 <div class="col-md-4">
                                     <div class="checkbox">
                                         <label>
-                                            <input type="checkbox" name="sshh" id="aula" class="styled">
+                                            <input type="checkbox" name="sshh" class="styled">
                                             SSHH Cercano a las Aulas
                                         </label>
                                     </div>
@@ -607,7 +612,7 @@
                                 <div class="col-md-4">
                                     <div class="checkbox">
                                         <label>
-                                            <input type="checkbox" name="alumbrado_electrico" id="aula" class="styled">
+                                            <input type="checkbox" name="alumbrado_electrico" class="styled">
                                             Alumbrado eléctrico
                                         </label>
                                     </div>
@@ -615,7 +620,7 @@
                                 <div class="col-md-4">
                                     <div class="checkbox">
                                         <label>
-                                            <input type="checkbox" name="ventiladores" id="aula" class="styled">
+                                            <input type="checkbox" name="ventiladores" class="styled">
                                             Ventiladores
                                         </label>
                                     </div>
@@ -625,7 +630,7 @@
                                 <div class="col-md-4">
                                     <div class="checkbox">
                                         <label>
-                                            <input type="checkbox" name="aireacondicionado" id="aula" class="styled">
+                                            <input type="checkbox" name="aireacondicionado" class="styled">
                                             Aire Acondicionado
                                         </label>
                                     </div>
@@ -633,7 +638,7 @@
                                 <div class="col-md-4">
                                     <div class="checkbox">
                                         <label>
-                                            <input type="checkbox" name="pizarra_acrilica" id="aula" class="styled">
+                                            <input type="checkbox" name="pizarra_acrilica" class="styled">
                                             Pizarra acrílica
                                         </label>
                                     </div>
@@ -641,7 +646,7 @@
                                 <div class="col-md-4">
                                     <div class="checkbox">
                                         <label>
-                                            <input type="checkbox" name="pizarra_cemento" id="aula" class="styled">
+                                            <input type="checkbox" name="pizarra_cemento" class="styled">
                                             Pizarra de Cemento
                                         </label>
                                     </div>
@@ -651,7 +656,7 @@
                                 <div class="col-md-4">
                                     <div class="checkbox">
                                         <label>
-                                            <input type="checkbox" name="proyector" id="aula" class="styled">
+                                            <input type="checkbox" name="proyector" class="styled">
                                             Proyector
                                         </label>
                                     </div>
@@ -659,7 +664,7 @@
                                 <div class="col-md-4">
                                     <div class="checkbox">
                                         <label>
-                                            <input type="checkbox" name="computadora" id="aula" class="styled">
+                                            <input type="checkbox" name="computadora" class="styled">
                                             Computadora
                                         </label>
                                     </div>
@@ -667,18 +672,19 @@
                                 <div class="col-md-4">
                                     <div class="checkbox">
                                         <label>
-                                            <input type="checkbox" name="acceso_internet" id="aula" class="styled">
+                                            <input type="checkbox" name="acceso_internet" class="styled">
                                             Acceso a Internet
                                         </label>
                                     </div>
                                 </div>
                             </div>
                         </fieldset>
+                        <div class="text-left">
+                            <button type="button" class="btn btn-link" data-dismiss="modal">Cerrar</button>
+                            <button type="button" id="registrar_aula_submit" class="btn btn-primary">Registrar Aula
+                            </button>
+                        </div>
                     </form>
-                    <div class="text-left">
-                        <button type="button" class="btn btn-link" data-dismiss="modal">Cerrar</button>
-                        <button type="button" id="registrar_aula_submit" class="btn btn-primary">Registrar Aula</button>
-                    </div>
                     <div class="row">
                         <table id="tabla_aulas" class="table table-responsive">
                             <thead>
@@ -702,6 +708,18 @@
             </div>
         </div>
     </div>
+    <button class="btn launch-map">Launch Map</button>
+
+    <div id="modal" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <input id="pac-input" class="controls" type="text" placeholder="Search Box">
+                <div id="map-canvas"></div>
+            </div>
+        </div>
+
+    </div>
+    <!-- /.modal -->
 {% endblock %}
 
 {% block js %}
@@ -716,4 +734,89 @@
     <script type="text/javascript" src="{% static "assets/js/plugins/ui/ripple.min.js" %}"></script>
     <script type="text/javascript" src="{% static "assets/js/capacitacion/index.js" %}"></script>
     <script type="text/javascript" src="{% static "assets/js/capacitacion/aula.js" %}"></script>
+    <script>
+        // This example adds a search box to a map, using the Google Place Autocomplete
+        // feature. People can enter geographical searches. The search box will return a
+        // pick list containing a mix of places and predicted search terms.
+        function initAutocomplete() {
+            center = {lat: -12.034467, lng: -77.095752};
+            map = new google.maps.Map(document.getElementById('map-canvas'), {
+                center: center,
+                zoom: 13,
+                mapTypeId: google.maps.MapTypeId.ROADMAP
+            });
+
+            // Create the search box and link it to the UI element.
+            var input = document.getElementById('pac-input');
+            var searchBox = new google.maps.places.SearchBox(input);
+            map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+            // Bias the SearchBox results towards current map's viewport.
+            map.addListener('bounds_changed', function () {
+                searchBox.setBounds(map.getBounds());
+            });
+            google.maps.event.addListener(map, "dblclick", function (e) {
+                $('input[name="nombre_via"]').val($('#pac-input').val());
+                $('#modal').modal('hide');
+            });
+
+            var markers = [];
+            // [START region_getplaces]
+            // Listen for the event fired when the user selects a prediction and retrieve
+            // more details for that place.
+            searchBox.addListener('places_changed', function () {
+                var places = searchBox.getPlaces();
+
+                if (places.length == 0) {
+                    return;
+                }
+
+                // Clear out the old markers.
+                markers.forEach(function (marker) {
+                    marker.setMap(null);
+                });
+                markers = [];
+
+                // For each place, get the icon, name and location.
+                var bounds = new google.maps.LatLngBounds();
+                places.forEach(function (place) {
+                    var icon = {
+                        url: place.icon,
+                        size: new google.maps.Size(71, 71),
+                        origin: new google.maps.Point(0, 0),
+                        anchor: new google.maps.Point(17, 34),
+                        scaledSize: new google.maps.Size(25, 25)
+                    };
+
+                    // Create a marker for each place.
+                    markers.push(new google.maps.Marker({
+                        map: map,
+                        icon: icon,
+                        title: place.name,
+                        position: place.geometry.location
+                    }));
+
+                    if (place.geometry.viewport) {
+                        // Only geocodes have viewport.
+                        bounds.union(place.geometry.viewport);
+                    } else {
+                        bounds.extend(place.geometry.location);
+                    }
+                });
+                map.fitBounds(bounds);
+            });
+            // [END region_getplaces]
+        }
+
+    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAZ0rTBOS6SVXATgEUkZmNS7E5mIKBGXMI&libraries=places&callback=initAutocomplete"
+            async defer></script>
+    <script>
+        $('#abrir_mapa').on('click', function () {
+            $('#modal').modal({}).on('shown.bs.modal', function () {
+                google.maps.event.trigger(map, "resize");
+                map.setCenter(center);
+            });
+        })
+    </script>
+
 {% endblock %}

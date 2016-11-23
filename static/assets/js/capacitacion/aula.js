@@ -1,35 +1,33 @@
 $('#registrar_aulas_modal').on('click', function () {
     let ambientescheck = $('#ambientesdata :input[type="checkbox"]');
     $('#id_ambiente').find('option').remove();
-    let data = [];
+    let data = [{id: '', text: 'Seleccione'}];
+    let html = ''
     $.each(ambientescheck, function (key, val) {
         let texto = $(val).parent().parent().parent().text();
         let id = parseInt(key) + 1;
-        $(val).is(':checked') ? data.push({id: id, text: texto.trim()}) : '';
+        $(val).is(':checked') ? html += `<option value="${id}">${texto}</option>` : '';
     });
-    $('#id_ambiente').select2({data: data});
+    $('#id_ambiente').append(html);
     getLocalAmbientes();
 });
 
 function setLocalAmbienteForm(id_localambiente) {
     $('#id_localambiente').val(id_localambiente);
-    $.uniform.update()
     let url = `${BASE_URL}rest/localambiente/${id_localambiente}/`;
+    resetForm('form_aula');
     $.getJSON(url, data=> {
         "use strict";
         console.log(data);
         $.each(data, (key, val)=> {
-            console.log($(`input[name=${key}]`),key,val);
-            if ($(`input[name=${key}]`).is(":checkbox") && $(`input[name=${key}]`).val() == "1") {
-                console.log($(`input[name=${key}]`).is(":checkbox"));
-                console.log($(`input[name=${key}]`).val() == "1");
+            if ($(`input[name=${key}]`).is(":checkbox") && val == "1") {
                 $(`input[name=${key}]`).prop('checked', true);
                 $.uniform.update()
             } else {
-                $(`input[name=${key}]`).val(val);
+                $(`input[name=${key}]`).val(val).trigger('change');
             }
         });
-
+        $('#id_ambiente').val(data.id_ambiente).trigger('change');
     });
 }
 function getLocalAmbientes() {
@@ -39,26 +37,27 @@ function getLocalAmbientes() {
     $.getJSON(url, function (data) {
         if (data.length > 0) {
             let html = '';
+            console.log(data);
             $.each(data, function (key, val) {
                 let ambiente = '';
                 switch (val.id_ambiente) {
-                    case "1":
+                    case 1:
                         ambiente = 'Aula';
                         break;
-                    case "2":
+                    case 2:
                         ambiente = 'Auditorios';
                         break;
-                    case "3":
+                    case 3:
                         ambiente = 'Sala Reunion';
                         break;
-                    case "4":
+                    case 4:
                         ambiente = 'Oficina Administrativa';
                         break;
-                    case "5":
+                    case 5:
                         ambiente = 'Otros';
                         break;
                 }
-                html = `<tr><td>${val.numero}</td><td>${ambiente}</td><td>${val.capacidad}</td><td><button onclick="setLocalAmbienteForm(${val.id_localambiente})">Editar</button></td></tr>`;
+                html += `<tr><td>${val.numero}</td><td>${ambiente}</td><td>${val.capacidad}</td><td><button onclick="setLocalAmbienteForm(${val.id_localambiente})">Editar</button></td></tr>`;
             });
             $('#tabla_aulas').find('tbody').html(html);
             $('#tabla_aulas').DataTable();
@@ -113,7 +112,7 @@ var validator_aula = $(".form-validate-aula").validate({
     },
     validClass: "validation-valid-label",
     success: function (label) {
-        label.addClass("validation-valid-label").text("Success.")
+        label.addClass("validation-valid-label").text("Correcto.")
     },
     rules: {
         mesas_cant: {
@@ -142,80 +141,126 @@ var validator_aula = $(".form-validate-aula").validate({
         custom: {
             required: "El campo es requerido",
         },
-        agree: "Please accept our policy"
     }
 });
 
 $('#registrar_aula_submit').on('click', ()=> {
-    "use strict";
-    validator_aula.form();
-    validator_aula.showErrors();
-    let url = '';
-    let method = '';
-    let title = '';
-    let text = '';
-    let title_entry = '';
-    if ($('#id_localambiente').val() != '') {
-        url = `${BASE_URL}rest/localambiente/${$('#id_localambiente').val()}/`;
-        method = 'PUT';
-        title = 'Edición!';
-        text = 'El Aula se ha editado con exito!';
-        title_entry = 'Esta usted seguro de Editar el Aula?'
-    } else {
-        url = `${BASE_URL}rest/localambiente/`;
-        method = 'POST';
-        title = 'Agregado!';
-        text = 'El Aula se ha Agregado con exito!';
-        title_entry = 'Esta usted seguro de Agregar el Aula?'
+    let ambienteusar = ''
+    switch ($('#id_ambiente').val()) {
+        case "1":
+            ambienteusar = 'cantidad_usar_aulas';
+            break;
+        case "2":
+            ambienteusar = 'cantidad_usar_auditorios';
+            break;
+        case "3":
+            ambienteusar = 'cantidad_usar_oficina';
+            break;
+        case "4":
+            ambienteusar = 'cantidad_usar_sala';
+            break;
+        case "5":
+            ambienteusar = 'cantidad_usar_otros';
+            break;
     }
-    if (validator_aula.numberOfInvalids() == 0) {
-        swal({
-            title: title_entry,
-            text: "",
-            type: "success",
-            showCancelButton: true,
-            confirmButtonColor: "#EF5350",
-            confirmButtonText: "Si!",
-            cancelButtonText: "No, Cancelar!",
-            closeOnConfirm: false,
-            closeOnCancel: false
-        }, function (isConfirm) {
-            if (isConfirm) {
-                let id_localambiente = $('#id_localambiente').val();
-                let form_data = $('#form_aula').serializeArray();
-                let dataupdate = {};
-                dataupdate['id_local'] = $('#id_local').val();
-                $.each(form_data, function (key, val) {
-                    val.value == "on" ? dataupdate[val.name] = 1 : dataupdate[val.name] = val.value;
-                });
-                $.ajax({
-                    url: url,
-                    type: method,
-                    data: dataupdate,
-                    success: function (data) {
+    validarCantidadAmbientes($('#id_ambiente').val(), ambienteusar)
+});
+
+
+function validarCantidadAmbientes(ambientenum, ambiente_usar) {
+    let id_local = $('#id_local').val();
+    let url = `${BASE_URL}localambiente/${id_local}/`;
+    $.getJSON(url, function (data) {
+        let count = 1;
+        $.each(data, function (key, val) {
+            let ambiente = '';
+            if (val.id_ambiente == ambientenum) {
+                count++;
+            }
+        });
+        if (count > $('#' + ambiente_usar).val()) {
+            $('#msg_error').show();
+        } else {
+            "use strict";
+            let url = '';
+            let method = '';
+            let title = '';
+            let text = '';
+            let title_entry = '';
+            if ($('#id_localambiente').val() != '') {
+                url = `${BASE_URL}rest/localambiente/${$('#id_localambiente').val()}/`;
+                method = 'PUT';
+                title = 'Edición!';
+                text = 'El Aula se ha editado con exito!';
+                title_entry = 'Esta usted seguro de Editar el Aula?'
+            } else {
+                url = `${BASE_URL}rest/localambiente/`;
+                method = 'POST';
+                title = 'Agregado!';
+                text = 'El Aula se ha Agregado con exito!';
+                title_entry = 'Esta usted seguro de Agregar el Aula?'
+            }
+            if (validator_aula.numberOfInvalids() == 0) {
+                swal({
+                    title: title_entry,
+                    text: "",
+                    type: "success",
+                    showCancelButton: true,
+                    confirmButtonColor: "#EF5350",
+                    confirmButtonText: "Si!",
+                    cancelButtonText: "No, Cancelar!",
+                    closeOnConfirm: false,
+                    closeOnCancel: false
+                }, function (isConfirm) {
+                    window.onkeydown = null;
+                    window.onfocus = null;
+                    if (isConfirm) {
+                        let id_localambiente = $('#id_localambiente').val();
+                        let form_data = $('#form_aula :not(:checkbox)').serializeArray();
+
+                        $('#form_aula :checkbox').map((key, val)=> {
+                            if ($(val).is(':checked')) {
+                                form_data.push({name: val.name, value: '1'});
+                            } else {
+                                form_data.push({name: val.name, value: '0'});
+                            }
+                        });
+                        let dataupdate = {};
+                        dataupdate['id_local'] = $('#id_local').val();
+                        console.log(form_data);
+                        $.each(form_data, function (key, val) {
+                            val.value == "on" ? dataupdate[val.name] = 1 : dataupdate[val.name] = val.value;
+                        });
+                        dataupdate['id_ambiente'] = $('#id_ambiente').val();
+                        $.ajax({
+                            url: url,
+                            type: method,
+                            data: dataupdate,
+                            success: function (data) {
+                                console.log(data);
+                                $('#id_localambiente').val('');
+                                validator_aula.resetForm()
+                            }
+                        })
                         swal({
                             title: title,
                             text: text,
                             confirmButtonColor: "#66BB6A",
                             type: "success"
                         });
-                        console.log(data);
+                        resetForm('form_aula');
                         getLocalAmbientes();
-                        validator_aula.resetForm();
-                        $.uniform.update();
+                        $('#id_localambiente').val('');
+                    } else {
+                        swal({
+                            title: "Cancelado",
+                            text: "La acción fue cancelada",
+                            confirmButtonColor: "#2196F3",
+                            type: "error"
+                        });
                     }
-                })
-            } else {
-                swal({
-                    title: "Cancelado",
-                    text: "La acción fue cancelada",
-                    confirmButtonColor: "#2196F3",
-                    type: "error"
                 });
             }
-        });
-    }
-
-});
-
-
+        }
+    });
+}
