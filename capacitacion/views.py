@@ -9,11 +9,20 @@ from serializer import *
 from rest_framework import generics
 
 
-def gato(request):
+def modulo_registro(request):
     template = loader.get_template('capacitacion/modulo_registro.html')
     context = {
         'titulo_padre': 'Capacitacion',
         'titulo_hijo': 'Modulo de Registro'
+    }
+    return HttpResponse(template.render(context, request))
+
+
+def cursos_evaluaciones(request):
+    template = loader.get_template('capacitacion/cursos_evaluaciones.html')
+    context = {
+        'titulo_padre': 'Capacitacion',
+        'titulo_hijo': 'Cursos y Evaluaciones'
     }
     return HttpResponse(template.render(context, request))
 

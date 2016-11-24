@@ -13,12 +13,11 @@
         <li>
             <a href="#"><i class="icon-stack"></i> <span>Capacitación</span></a>
             <ul>
-                <li class="active"><a href="/">Modulo de Registro</a></li>
-                <li><a href="/">Cursos y Evaluaciones</a></li>
+                <li class="active"><a href="http://192.168.200.123:3000/modulo_registro">Modulo de Registro</a></li>
+                <li><a href="http://192.168.200.123:3000/cursos_evaluaciones">Cursos y Evaluaciones</a>
+                </li>
             </ul>
         </li>
-        <li><a href=""><i class="icon-list-unordered"></i>
-            <span>Changelog</span></a></li>
         <!-- /main -->
     </ul>
 {% endblock %}
@@ -97,7 +96,7 @@
                             <div class="col-md-4">
                                 <div class="form-group">
                                     <label>Etapa</label>
-                                    <select id="etapa" class="select" onchange="getCursos(this.value)">
+                                    <select id="etapa" class="form-control" onchange="getCursos(this.value)">
                                         <option value="1">CENSO EXPERIMENTAL</option>
                                         <option value="2">Empadronamiento</option>
                                     </select>
@@ -106,7 +105,7 @@
                             <div class="col-md-4">
                                 <div class="form-group">
                                     <label>Cursos</label>
-                                    <select id="cursos" name="id_curso" class="select">
+                                    <select id="cursos" name="id_curso" class="select2 form-control">
                                         <option value="">Seleccione</option>
                                     </select>
                                 </div>
@@ -155,7 +154,7 @@
                             <div class="col-md-3">
                                 <div class="form-group">
                                     <label>Referencia</label>
-                                    <input type="text" required="required" name="referencia"
+                                    <input type="text" name="referencia"
                                            class="form-control" placeholder="">
                                 </div>
                             </div>
@@ -514,7 +513,8 @@
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label>Ambiente</label>
-                                        <select name="id_ambiente" class="select2 select2 form-control" id="id_ambiente"></select>
+                                        <select name="id_ambiente" class="select2 select2 form-control"
+                                                id="id_ambiente"></select>
                                     </div>
                                 </div>
                                 <div class="col-md-3">
@@ -710,7 +710,7 @@
     </div>
     <button class="btn launch-map">Launch Map</button>
 
-    <div id="modal" class="modal fade">
+    <div id="modal" class="modal fade" tabindex="-1">
         <div class="modal-dialog">
             <div class="modal-content">
                 <input id="pac-input" class="controls" type="text" placeholder="Search Box">

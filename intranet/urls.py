@@ -21,7 +21,9 @@ from capacitacion.urls import *
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^rest/', include(router.urls)),
-    url(r'^$', gato, name='gato'),
+    url(r'^$', modulo_registro, name='modulo_registro'),
+    url(r'^modulo_registro/$', modulo_registro, name='modulo_registro'),
+    url(r'^cursos_evaluaciones/$', cursos_evaluaciones, name='cursos_evaluaciones'),
     url(r'^departamentos/$', DepartamentosList.as_view()),
     url(r'^provincias/(?P<ccdd>[0-9]+)/$', ProvinciasList.as_view()),
     url(r'^distritos/(?P<ccdd>[0-9]+)/(?P<ccpp>[0-9]+)/$',

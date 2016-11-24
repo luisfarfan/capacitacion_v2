@@ -13,11 +13,9 @@ function initialize() {
         map: map,
         position: center
     });
-
 }
 
 $('.launch-map').on('click', function () {
-
     $('#modal').modal({
     }).on('shown.bs.modal', function () {
         google.maps.event.trigger(map, 'resize');

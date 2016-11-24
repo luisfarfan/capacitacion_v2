@@ -20,3 +20,13 @@ class LocalAmbienteSerializer(serializers.ModelSerializer):
 class CursoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Curso
+
+
+class CriterioSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Criterio
+
+
+class CursoCriterioSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CursoCriterio

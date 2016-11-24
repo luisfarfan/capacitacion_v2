@@ -2,7 +2,7 @@
  * Created by LFarfan on 21/11/2016.
  */
 //BASE_URL = `http://localhost:8000/`;
-BASE_URL = `http://192.168.200.123:3000/`;
+
 function resetForm(idform) {
     "use strict";
     $('#' + idform + ' :input').map(function () {
@@ -40,6 +40,9 @@ $(function () {
 
     $('.daterange-single').daterangepicker({
         singleDatePicker: true,
+        locale: {
+            format: 'DD/MM/YYYY'
+        }
     });
     getDepartamentos();
     getCursos(1);
@@ -193,24 +196,33 @@ function getLocal(id_local) {
 }
 function getCursos(id_etapa) {
     $('#cursos').find('option').remove();
-    let array_cursos = [];
+    let array_cursos = [{id: '', text: 'Seleccione'}];
     $.getJSON(`${BASE_URL}cursobyetapa/${id_etapa}`, function (data) {
         $.each(data, function (key, val) {
             array_cursos.push({id: val.id_curso, text: val.nombre_curso})
         });
-        $('#cursos').select2({data: array_cursos});
+        setSelect('cursos', array_cursos);
     });
+}
+function setSelect(id, json, select2 = false) {
+    $('#' + id).find('option').remove();
+    let html = '';
+    $.each(json, function (key, val) {
+        html += `<option value="${val.id}">${val.text}</option>`
+    });
+    $('#' + id).html(html);
+    select2 ? $('#' + id).select2() : '';
 }
 
 jQuery.validator.addMethod("validateFechaInicio", function (value, element) {
-    var fin = new Date($('input[name="fecha_fin"]').val());
-    var inicio = new Date(value);
+    let fechafin = $('input[name="fecha_fin"]').val();
+    var part_ff = fechafin.split("/");
+    var fin = new Date(`${part_ff[1]}/${part_ff[0]}/${part_ff[2]}`);
+    var part_fi = value.split("/");
+    var inicio = new Date(`${part_fi[1]}/${part_fi[0]}/${part_fi[2]}`);
 
     var f = Date.parse(fin);
     var i = Date.parse(inicio);
-
-    console.log(f, i);
-    console.log(f > i);
     return f > i
 }, jQuery.validator.format("Fecha de Inicio tiene que ser menor que la Fecha Fin"));
 
@@ -222,8 +234,11 @@ jQuery.validator.addMethod("esMenor", function (value, element) {
 }, jQuery.validator.format("Debe ser menor a Disponible"));
 
 jQuery.validator.addMethod("validateFechaFin", function (value, element) {
-    var fin = new Date($('input[name="fecha_inicio"]').val());
-    var inicio = new Date(value);
+    let fechafin = $('input[name="fecha_inicio"]').val();
+    var part_ff = fechafin.split("/");
+    var fin = new Date(`${part_ff[1]}/${part_ff[0]}/${part_ff[2]}`);
+    var part_fi = value.split("/");
+    var inicio = new Date(`${part_fi[1]}/${part_fi[0]}/${part_fi[2]}`);
 
     var f = Date.parse(fin);
     var i = Date.parse(inicio);

@@ -34,6 +34,8 @@ class Curso(models.Model):
     nombre_curso = models.CharField(max_length=100, blank=True, null=True)
     id_etapa = models.ForeignKey('Etapa', db_column='id_etapa')
     funcionarios = models.ManyToManyField('Funcionario', through='CursoFuncionario')
+    criterios = models.ManyToManyField('Criterio', through='CursoCriterio')
+    nota_minima = models.IntegerField(blank=True, null=True)
 
     class Meta:
         managed = True
@@ -139,8 +141,28 @@ class Local(models.Model):
     cantidad_disponible_otros = models.IntegerField(blank=True, null=True)
     cantidad_usar_otros = models.IntegerField(blank=True, null=True)
 
-
-
     class Meta:
         managed = True
         db_table = 'LOCAL'
+
+
+class Criterio(models.Model):
+    id_criterio = models.AutoField(primary_key=True, db_column='id_criterio')
+    nombre_criterio = models.CharField(max_length=100, blank=True, null=True)
+    descripcion_criterio = models.CharField(max_length=100, blank=True, null=True)
+
+    class Meta:
+        managed = True
+        db_table = 'CRITERIO'
+
+
+class CursoCriterio(models.Model):
+    id_cursocriterio = models.AutoField(primary_key=True, db_column='id_cursocriterio')
+    id_curso = models.ForeignKey('Curso', db_column='id_curso')
+    id_criterio = models.ForeignKey('Criterio', db_column='id_criterio')
+    descripcion_criterio = models.CharField(max_length=100, blank=True, null=True)
+    peso = models.IntegerField()
+
+    class Meta:
+        managed = True
+        db_table = 'CURSO_CRITERIO'
