@@ -89,15 +89,10 @@
 
                 <div class="modal-body">
                     <div class="row">
-                        <div class="col-md-6">
-                            <label class="col-md-4 control-label text-right">Evaluación: </label>
-                            <div class="col-md-8">
-                                <input type="text" class="form-control" placeholder="">
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <button type="button" class="btn btn-primary btn-rounded legitRipple">
-                                Registrar Evaluación
+                        <div class="col-md-6 col-lg-offset-3">
+                            <button id="btn_registrarcriterio" type="button"
+                                    class="btn btn-primary btn-rounded legitRipple">
+                                Agregar Evaluación
                             </button>
                         </div>
                     </div>
@@ -108,7 +103,9 @@
                                 <thead>
                                 <tr>
                                     <th>N°</th>
-                                    <th>Criterio de Evaluación</th>
+                                    <th>Criterio de Criterio</th>
+                                    <th>Descripción de Criterio</th>
+                                    <th>Acción</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -121,10 +118,121 @@
             </div>
         </div>
     </div>
+    <div id="modalform_registrar_criterio" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-primary">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h6 class="modal-title">Registrar Criterio de Evaluación</h6>
+                </div>
+
+                <div id="modalform_addcriterio" class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <form id="form_registrarcriterio" class="form-horizontal">
+                                <input type="hidden" id="id_criterio" value="">
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label">Nombre Evaluación</label>
+                                    <div class="col-md-8">
+                                        <input id="nombre_criterio" value="" required name="nombre_criterio"
+                                               type="text" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label">Descripcion de Evaluación</label>
+                                    <div class="col-md-8">
+                                        <input id="descripcion_criterio" value="" required
+                                               name="descripcion_criterio" type="text" class="form-control">
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-link" data-dismiss="modal">Cerrar</button>
+                    <button id="submit_registrarcriterio" class="btn btn-primary">Guardar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal_evaluacioncurso" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-primary">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h6 class="modal-title">Evaluaciones del Curso</h6>
+                </div>
+
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="form-group">
+                            <label class="control-label col-lg-4">Nota Mínima del Curso</label>
+                            <div class="col-lg-6">
+                                <div class="input-group">
+                                    <input type="number" name="nota_minima" ID="nota_minima" class="form-control"
+                                           placeholder="Nota Minima">
+                                    <span class="input-group-btn">
+													<button id="btn_guardarnotaminima" class="btn bg-teal legitRipple"
+                                                            type="button">Guardar</button>
+												</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <form class="form-horizontal">
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label">Criterios</label>
+                                    <input type="hidden" id="id_curso">
+                                    <div class="col-md-8">
+                                        <select name="id_criterio2" id="id_criterio2" class="form-control">
+
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label">Ponderación</label>
+                                    <div class="col-md-8">
+                                        <input id="ponderacion" required
+                                               name="ponderacion" type="text" class="form-control">
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <button id="btn_registrar_criterio_curso" class="btn btn-primary">Registrar</button>
+                    </div>
+                    <div class="row">
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-responsive">
+                                <thead>
+                                <tr>
+                                    <th>N°</th>
+                                    <th>Criterio de Evaluación</th>
+                                    <th>Ponderación</th>
+                                    <th>Fecha de Evaluación</th>
+                                </tr>
+                                </thead>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-link" data-dismiss="modal">Cerrar</button>
+                    <button class="btn btn-primary">Guardar</button>
+                </div>
+            </div>
+        </div>
+    </div>
     <!-- END MODALS!  -->
 {% endblock %}
 
 {% block js %}
+    <script type="text/javascript" src="{% static "assets/js/plugins/notifications/bootbox.min.js" %}"></script>
     <script type="text/javascript" src="{% static "assets/js/plugins/tables/datatables/datatables.min.js" %}"></script>
     <script type="text/javascript" src="{% static "assets/js/plugins/forms/validation/validate.min.js" %}"></script>
     <script type="text/javascript" src="{% static "assets/js/plugins/notifications/sweet_alert.min.js" %}"></script>
@@ -132,3 +240,4 @@
     <script type="text/javascript" src="{% static "assets/js/core/app.js" %}"></script>
     <script type="text/javascript" src="{% static "assets/js/capacitacion/cursos_evaluaciones.js" %}"></script>
 {% endblock %}
+

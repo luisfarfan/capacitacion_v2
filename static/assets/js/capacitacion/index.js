@@ -127,6 +127,20 @@ function getLocal(id_local) {
                     $(`input[name=${key}]`).val(val)
                 }
             });
+            center = {
+                lat: $('#x').val() != '' ? parseFloat($('#x').val()) : -12.034467,
+                lng: $('#y').val() != '' ? parseFloat($('#y').val()) : -77.095752
+            };
+
+            var marker = new google.maps.Marker({
+                position: new google.maps.LatLng(center.lat, center.lng),
+                title: "Aqui!"
+            });
+            marker.setMap(map);
+
+// To add the marker to the map, call setMap();
+            marker.setMap(map);
+            $('#pac-input').val($('input[name="nombre_via"]').val());
             if (data.cantidad_disponible_aulas == 0) {
                 $('#cantidad_disponible_aulas').val(data.cantidad_disponible_aulas);
                 $('#cantidad_usar_aulas').val(data.cantidad_usar_aulas);
@@ -390,6 +404,7 @@ var validator = $(".form-validate-jquery").validate({
         agree: "Please accept our policy"
     }
 });
+
 $('#reset').on('click', function () {
     resetForm('form_local');
     $('#id_local').val('');

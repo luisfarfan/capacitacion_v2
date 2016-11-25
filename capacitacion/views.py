@@ -99,3 +99,18 @@ class CursobyEtapaViewSet(generics.ListAPIView):
     def get_queryset(self):
         id_etapa = self.kwargs['id_etapa']
         return Curso.objects.filter(id_etapa=id_etapa)
+
+
+class CriteriosViewSet(viewsets.ModelViewSet):
+    queryset = Criterio.objects.all()
+    serializer_class = CriterioSerializer
+
+
+class CursoCriteriosViewSet(viewsets.ModelViewSet):
+    queryset = CursoCriterio.objects.all()
+    serializer_class = CursoCriterioSerializer
+
+
+class CursoViewSet(viewsets.ModelViewSet):
+    queryset = Curso.objects.all()
+    serializer_class = CursoSerializer

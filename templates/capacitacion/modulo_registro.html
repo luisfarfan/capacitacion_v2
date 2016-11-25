@@ -250,6 +250,9 @@
                             </div>
                         </div>
                     </fieldset>
+                    <input type="text" style="display: none" name="x" id="x">
+                    <input type="text" style="display: none" name="y" id="y">
+
                     <fieldset class="content-group">
                         <legend class="text-bold">Datos de Funcionario del INEI</legend>
                         <div class="row">
@@ -708,7 +711,6 @@
             </div>
         </div>
     </div>
-    <button class="btn launch-map">Launch Map</button>
 
     <div id="modal" class="modal fade" tabindex="-1">
         <div class="modal-dialog">
@@ -739,7 +741,10 @@
         // feature. People can enter geographical searches. The search box will return a
         // pick list containing a mix of places and predicted search terms.
         function initAutocomplete() {
-            center = {lat: -12.034467, lng: -77.095752};
+            center = {
+                lat: $('#x').val() != '' ?  $('#x').val() : -12.034467,
+                lng: $('#y').val() != '' ? $('#y').val() : -77.095752
+            };
             map = new google.maps.Map(document.getElementById('map-canvas'), {
                 center: center,
                 zoom: 13,
@@ -757,6 +762,8 @@
             google.maps.event.addListener(map, "dblclick", function (e) {
                 $('input[name="nombre_via"]').val($('#pac-input').val());
                 $('#modal').modal('hide');
+                $('#x').val(e.latLng.lat());
+                $('#y').val(e.latLng.lng());
             });
 
             var markers = [];

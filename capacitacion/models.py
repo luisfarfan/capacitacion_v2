@@ -129,7 +129,8 @@ class Local(models.Model):
     responsable_email = models.CharField(max_length=100, blank=True, null=True)
     responsable_telefono = models.CharField(max_length=100, blank=True, null=True)
     responsable_celular = models.CharField(max_length=100, blank=True, null=True)
-
+    x = models.CharField(max_length=100, blank=True, null=True)
+    y = models.CharField(max_length=100, blank=True, null=True)
     cantidad_disponible_aulas = models.IntegerField(blank=True, null=True)
     cantidad_usar_aulas = models.IntegerField(blank=True, null=True)
     cantidad_disponible_auditorios = models.IntegerField(blank=True, null=True)
@@ -165,4 +166,5 @@ class CursoCriterio(models.Model):
 
     class Meta:
         managed = True
+        unique_together = ('id_curso', 'id_criterio',)
         db_table = 'CURSO_CRITERIO'
