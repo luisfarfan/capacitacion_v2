@@ -114,3 +114,11 @@ class CursoCriteriosViewSet(viewsets.ModelViewSet):
 class CursoViewSet(viewsets.ModelViewSet):
     queryset = Curso.objects.all()
     serializer_class = CursoSerializer
+
+
+class CursoCriteriobyCursoViewSet(generics.ListAPIView):
+    serializer_class = CursoCriterioSerializer
+
+    def get_queryset(self):
+        id_curso = self.kwargs['id_curso']
+        return CursoCriterio.objects.filter(id_curso=id_curso)

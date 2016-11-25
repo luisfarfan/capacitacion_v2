@@ -9,4 +9,3 @@ router.register(r'localambiente', LocalAmbienteViewSet)
 router.register(r'criterio', CriteriosViewSet)
 router.register(r'cursocriterios', CursoCriteriosViewSet)
 router.register(r'cursos', CursoViewSet)
-

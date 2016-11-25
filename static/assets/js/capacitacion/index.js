@@ -490,11 +490,11 @@ $('#aula').change(function () {
 
         $('#cantidad_disponible_aulas').focus()
     } else {
-        $('#cantidad_disponible_aulas').prop('readonly', true);
+        $('#cantidad_disponible_aulas').prop('readonly', false);
         $('#cantidad_disponible_aulas').val("0");
         $('#cantidad_disponible_aulas').prop('required', false);
 
-        $('#cantidad_usar_aulas').prop('readonly', true);
+        $('#cantidad_usar_aulas').prop('readonly', false);
         $('#cantidad_usar_aulas').val("0");
         $('#cantidad_usar_aulas').prop('required', false);
     }
@@ -509,11 +509,11 @@ $('#auditorio').change(function () {
         $('#cantidad_usar_auditorios').prop('required', true);
         $('#cantidad_disponible_auditorios').focus()
     } else {
-        $('#cantidad_disponible_auditorios').prop('readonly', true);
+        $('#cantidad_disponible_auditorios').prop('readonly', false);
         $('#cantidad_disponible_auditorios').val("0");
         $('#cantidad_disponible_auditorios').prop('required', false);
 
-        $('#cantidad_usar_auditorios').prop('readonly', true);
+        $('#cantidad_usar_auditorios').prop('readonly', false);
         $('#cantidad_usar_auditorios').val("0");
         $('#cantidad_usar_auditorios').prop('required', false);
     }
@@ -528,11 +528,11 @@ $('#oficina').change(function () {
         $('#cantidad_usar_oficina').prop('required', true);
         $('#cantidad_disponible_oficina').focus()
     } else {
-        $('#cantidad_disponible_oficina').prop('readonly', true);
+        $('#cantidad_disponible_oficina').prop('readonly', false);
         $('#cantidad_disponible_oficina').val("0");
         $('#cantidad_disponible_oficina').prop('required', false);
 
-        $('#cantidad_usar_oficina').prop('readonly', true);
+        $('#cantidad_usar_oficina').prop('readonly', false);
         $('#cantidad_usar_oficina').val("0");
         $('#cantidad_usar_oficina').prop('required', false);
     }
@@ -547,11 +547,11 @@ $('#sala').change(function () {
         $('#cantidad_usar_sala').prop('required', true);
         $('#cantidad_disponible_sala').focus()
     } else {
-        $('#cantidad_disponible_sala').prop('readonly', true);
+        $('#cantidad_disponible_sala').prop('readonly', false);
         $('#cantidad_disponible_sala').val("0");
         $('#cantidad_disponible_sala').prop('required', false);
 
-        $('#cantidad_usar_sala').prop('readonly', true);
+        $('#cantidad_usar_sala').prop('readonly', false);
         $('#cantidad_usar_sala').val("0");
         $('#cantidad_usar_sala').prop('required', false);
     }
@@ -566,7 +566,7 @@ $('#otros').change(function () {
         $('#cantidad_usar_otros').prop('required', true);
         $('#cantidad_disponible_otros').focus()
     } else {
-        $('#cantidad_usar_otros').prop('readonly', true);
+        $('#cantidad_usar_otros').prop('readonly', false);
         $('#cantidad_usar_otros').val("0");
         $('#cantidad_usar_otros').prop('required', false);
     }

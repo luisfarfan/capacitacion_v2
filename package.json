@@ -1,0 +1,7 @@
+{
+  "name": "intranet",
+  "version": "1.0.0",
+  "devDependencies": {
+    "babel-cli": "^6.18.0"
+  }
+}

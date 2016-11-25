@@ -183,12 +183,13 @@
                     </div>
                     <div class="row">
                         <div class="col-md-12">
-                            <form class="form-horizontal">
+                            <input type="hidden" name="id_curso" id="id_curso">
+                            <form class="form-horizontal" id="form_cursocriterio">
                                 <div class="form-group">
                                     <label class="col-md-4 control-label">Criterios</label>
-                                    <input type="hidden" id="id_curso">
+                                    <input type="hidden" id="id_cursocriterio">
                                     <div class="col-md-8">
-                                        <select name="id_criterio2" id="id_criterio2" class="form-control">
+                                        <select name="id_criterio" id="id_criterio2" class="form-control">
 
                                         </select>
                                     </div>
@@ -205,25 +206,25 @@
                     </div>
                     <div class="row">
                         <button id="btn_registrar_criterio_curso" class="btn btn-primary">Registrar</button>
+                        <button id="limpiar_formcursocriterio" class="btn btn-primary">Limpiar</button>
                     </div>
                     <div class="row">
                         <div class="table-responsive">
-                            <table class="table table-bordered table-responsive">
+                            <table id="tabla_cursocriterio" class="table table-bordered table-responsive">
                                 <thead>
                                 <tr>
                                     <th>N°</th>
                                     <th>Criterio de Evaluación</th>
                                     <th>Ponderación</th>
-                                    <th>Fecha de Evaluación</th>
+                                    <th>Accion</th>
                                 </tr>
                                 </thead>
+                                <tbody>
+
+                                </tbody>
                             </table>
                         </div>
                     </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-link" data-dismiss="modal">Cerrar</button>
-                    <button class="btn btn-primary">Guardar</button>
                 </div>
             </div>
         </div>

@@ -161,10 +161,12 @@ class CursoCriterio(models.Model):
     id_cursocriterio = models.AutoField(primary_key=True, db_column='id_cursocriterio')
     id_curso = models.ForeignKey('Curso', db_column='id_curso')
     id_criterio = models.ForeignKey('Criterio', db_column='id_criterio')
-    descripcion_criterio = models.CharField(max_length=100, blank=True, null=True)
-    peso = models.IntegerField()
+    #descripcion_criterio = models.CharField(max_length=100, blank=True, null=True)
+    ponderacion = models.IntegerField()
 
     class Meta:
         managed = True
         unique_together = ('id_curso', 'id_criterio',)
         db_table = 'CURSO_CRITERIO'
+
+

@@ -197,6 +197,8 @@ function registrarEvaluacion(id_curso, nota_minima) {
     $('#modal_evaluacioncurso').modal('show');
     $('#nota_minima').val(nota_minima);
     $('#id_curso').val(id_curso);
+
+    getCursoCriterios(id_curso);
 }
 $('#btn_guardarnotaminima').on('click', ()=> {
     "use strict";
@@ -213,9 +215,158 @@ function saveNotaMinima() {
                 type: 'PATCH',
                 data: {nota_minima: $('#nota_minima').val()},
                 success: response => {
-                    console.log(response);
+                    getCriterios();
                 },
-            })
+            });
         }
     });
+}
+
+function getCursoCriterios(id_curso) {
+    "use strict";
+    let html = '';
+    $('#tabla_cursocriterio').find('tbody').html('');
+    $.getJSON(`${BASE_URL}cursocriteriobycurso/${id_curso}/`, res=> {
+        $.each(res, (key, val)=> {
+            $.getJSON(`${BASE_URL}rest/criterio/${val.id_criterio}/`, response=> {
+                html = `<tr><td>${parseInt(key) + 1}</td><td>${response.nombre_criterio}</td><td>${val.ponderacion}%</td>
+                            <td>
+                                <ul class="icons-list">
+                                    <li><a onclick="editarCursoCriterio(${val.id_cursocriterio})" href="#"><i class="icon-pencil7"></i></a></li>
+                                    <li><a onclick="eliminarCursoCriterio(${val.id_cursocriterio})" href="#"><i class="icon-trash"></i></a></li>
+                                </ul>
+                            </td>
+                        </tr>`;
+                $('#tabla_cursocriterio').find('tbody').append(html);
+            });
+        });
+    });
+}
+
+function saveCriterioCurso() {
+    "use strict";
+    let id_cursocriterio = $('#id_cursocriterio').val();
+    let data = {};
+    $('#form_cursocriterio').serializeArray().map(res=> {
+        data[res.name] = res.value;
+    });
+    data['id_curso'] = $('#id_curso').val();
+    let ajax_options = {};
+    if (id_cursocriterio != '') {
+        ajax_options['url'] = `${BASE_URL}rest/cursocriterios/${id_cursocriterio}/`;
+        ajax_options['type'] = 'PUT';
+        ajax_options['data'] = data;
+    } else {
+        ajax_options['url'] = `${BASE_URL}rest/cursocriterios/`;
+        ajax_options['type'] = 'POST';
+        ajax_options['data'] = data;
+    }
+    ajax_options['success'] = function (response) {
+        bootbox.alert({
+            message: "El registro se ha guardado con éxito!",
+            backdrop: true
+        });
+        getCursoCriterios($('#id_curso').val());
+        $('#limpiar_formcursocriterio').trigger('change');
+    };
+    ajax_options['error'] = function (response) {
+        bootbox.alert({
+            message: "Ha ocurrido un error en el proceso",
+            backdrop: true
+        })
+        $('#limpiar_formcursocriterio').trigger('change');
+
+    };
+
+    $.ajax(ajax_options)
+
+}
+
+
+var validator_crusocriterio = $("#form_cursocriterio").validate({
+    rules: {
+        ponderacion: {
+            range: [0, 100],
+            required: true
+        },
+        id_criterio2: {
+            required: true
+        }
+    },
+});
+
+$('#btn_registrar_criterio_curso').on('click', event=> {
+    "use strict";
+    if (validator_crusocriterio.numberOfInvalids() == 0) {
+        bootbox.confirm("¿Esta usted seguro de guardar?", result=> {
+            if (result) {
+                saveCriterioCurso();
+            }
+        });
+    }
+});
+
+function editarCursoCriterio(id_cursocriterio) {
+    "use strict";
+    $('#id_cursocriterio').val(id_cursocriterio);
+    $.getJSON(`${BASE_URL}rest/cursocriterios/${id_cursocriterio}`, response=> {
+        $('#id_criterio2').val(response.id_criterio);
+        $('#ponderacion').val(response.ponderacion);
+    });
+}
+
+$('#limpiar_formcursocriterio').click(e=> {
+    "use strict";
+    $('#form_cursocriterio :input').map(function () {
+        $(this).val('');
+    });
+});
+
+function eliminarCursoCriterio(id_cursocriterio) {
+    "use strict";
+    let ajax_options = {};
+    ajax_options['url'] = `${BASE_URL}rest/cursocriterios/${id_cursocriterio}/`;
+    ajax_options['type'] = 'DELETE';
+    ajax_options['success'] = function (response) {
+        bootbox.alert({
+            message: "El registro se ha eliminado con éxito!",
+            backdrop: true
+        });
+        getCursoCriterios($('#id_curso').val());
+        $('#limpiar_formcursocriterio').trigger('change');
+    };
+    bootbox.confirm("¿Esta usted seguro de eliminar este registro?", result=> {
+        if (result) {
+            $.ajax(ajax_options)
+        }
+    })
+}
+function slugify(text) {
+    return text.toString().toLowerCase()
+        .replace(/\s+/g, '-')           // Replace spaces with -
+        .replace(/[^\w\-]+/g, '')       // Remove all non-word chars
+        .replace(/\-\-+/g, '-')         // Replace multiple - with single -
+        .replace(/^-+/, '')             // Trim - from start of text
+        .replace(/-+$/, '');            // Trim - from end of text
+}
+function getJsonTable(id) {
+    let json = [];
+    "use strict";
+    let keys = [];
+    let trs = $('#' + id).find('tr');
+    trs.eq(0).children().map((key, val)=> {
+        keys.push(slugify($(val).text()));
+    });
+    let jsontd = {};
+
+    $('#' + id).find('tr').map((key, val)=> {
+        jsontd = {};
+        if (key != 0) {
+            $(val).find('td').map((k, v)=> {
+                jsontd[keys[k]] = $(v).text();
+            });
+            json.push(jsontd);
+        }
+    });
+    return json;
 }

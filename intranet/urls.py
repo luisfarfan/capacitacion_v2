@@ -31,7 +31,8 @@ urlpatterns = [
     url('^localubigeo/(?P<ubigeo>.+)/$', TbLocalByUbigeoViewSet.as_view()),
     url('^localambiente/(?P<id_local>.+)/$', TbLocalAmbienteByLocalViewSet.as_view()),
     url('^cursobyetapa/(?P<id_etapa>.+)/$', CursobyEtapaViewSet.as_view()),
-    #url('^localambiente/(?P<id_local>.+)/(?P<id_ambiente>.+)/$', LocalAmbienteByLocalAulaViewSet.as_view()),
+    url('^cursocriteriobycurso/(?P<id_curso>.+)/$', CursoCriteriobyCursoViewSet.as_view()),
 
+    # url('^localambiente/(?P<id_local>.+)/(?P<id_ambiente>.+)/$', LocalAmbienteByLocalAulaViewSet.as_view()),
 
 ]

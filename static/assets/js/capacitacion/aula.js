@@ -11,7 +11,6 @@ $('#registrar_aulas_modal').on('click', function () {
     $('#id_ambiente').append(html);
     getLocalAmbientes();
 });
-
 function setLocalAmbienteForm(id_localambiente) {
     $('#id_localambiente').val(id_localambiente);
     let url = `${BASE_URL}rest/localambiente/${id_localambiente}/`;
@@ -32,10 +31,10 @@ function setLocalAmbienteForm(id_localambiente) {
 function getLocalAmbientes() {
     let id_local = $('#id_local').val();
     let url = `${BASE_URL}localambiente/${id_local}/`;
-    $('#tabla_aulas').find('tbody').empty();
+    $('#tabla_aulas').find('tbody').html('');
+    let html = '';
     $.getJSON(url, function (data) {
         if (data.length > 0) {
-            let html = '';
             $.each(data, function (key, val) {
                 let ambiente = '';
                 switch (val.id_ambiente) {
@@ -58,10 +57,7 @@ function getLocalAmbientes() {
                 html += `<tr><td>${val.numero}</td><td>${ambiente}</td><td>${val.capacidad}</td><td><button onclick="setLocalAmbienteForm(${val.id_localambiente})">Editar</button></td></tr>`;
             });
             $('#tabla_aulas').find('tbody').html(html);
-            $('#tabla_aulas').DataTable({
-                "bFilter": false,
-                "bLengthChange": false,
-            });
+
         }
     });
 }
@@ -277,3 +273,9 @@ function dataSave() {
         }
     });
 }
+
+$('#limpiar_form_aula').on('click', function () {
+    "use strict";
+    resetForm('form_aula');
+    $('#id_localambiente').val('');
+});
