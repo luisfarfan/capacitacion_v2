@@ -13,7 +13,7 @@ def modulo_registro(request):
     template = loader.get_template('capacitacion/modulo_registro.html')
     context = {
         'titulo_padre': 'Capacitacion',
-        'titulo_hijo': 'Modulo de Registro'
+        'titulo_hijo': 'REGISTRO DE LOCAL'
     }
     return HttpResponse(template.render(context, request))
 
@@ -23,6 +23,15 @@ def cursos_evaluaciones(request):
     context = {
         'titulo_padre': 'Capacitacion',
         'titulo_hijo': 'Cursos y Evaluaciones'
+    }
+    return HttpResponse(template.render(context, request))
+
+
+def asistencia(request):
+    template = loader.get_template('capacitacion/asistencia.html')
+    context = {
+        'titulo_padre': 'Capacitacion',
+        'titulo_hijo': 'Modulo de Asistencia'
     }
     return HttpResponse(template.render(context, request))
 
@@ -50,6 +59,15 @@ class DistritosList(APIView):
         distritos = list(Ubigeo.objects.filter(ccdd=ccdd, ccpp=ccpp).values('ccdi', 'distrito').annotate(
             dcount=Count('ccdi', 'distrito')))
         response = JsonResponse(distritos, safe=False)
+        return response
+
+
+class ZonasList(APIView):
+    def get(self, request, ubigeo):
+        zonas = list(
+            Zona.objects.using('segmentacion').filter(UBIGEO=ubigeo).values('UBIGEO', 'ZONA').annotate(
+                dcount=Count('UBIGEO', 'ZONA')))
+        response = JsonResponse(zonas, safe=False)
         return response
 
 

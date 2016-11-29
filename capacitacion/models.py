@@ -18,6 +18,18 @@ class Ubigeo(models.Model):
         db_table = 'MAE_UBIGEO'
 
 
+class Zona(models.Model):
+    ID = models.IntegerField(primary_key=True)
+    UBIGEO = models.CharField(max_length=6)
+    ZONA = models.CharField(max_length=5)
+    LLAVE_CCPP = models.CharField(max_length=10)
+    LLAVE_ZONA = models.CharField(max_length=15)
+
+    class Meta:
+        managed = False
+        db_table = 'TB_ZONA'
+
+
 class Etapa(models.Model):
     id_etapa = models.AutoField(primary_key=True, db_column='id_etapa')
     cod_etapa = models.CharField(max_length=3, blank=True, null=True)
@@ -95,16 +107,23 @@ class LocalAmbiente(models.Model):
     acceso_internet = models.IntegerField(blank=True, null=True)
     aireacondicionado = models.IntegerField(blank=True, null=True)
     ventiladores = models.IntegerField(blank=True, null=True)
+    pea = models.ManyToManyField('PEA', through='PEA_AULA')
 
     class Meta:
         managed = True
         db_table = 'LOCAL_AMBIENTE'
+
+    def save(self, *args, **kwargs):
+        self.numero = LocalAmbiente.objects.filter(id_local=self.id_local, id_ambiente=self.id_ambiente).count()
+        self.numero = self.numero + 1
+        return super(LocalAmbiente, self).save(*args, **kwargs)
 
 
 class Local(models.Model):
     id_local = models.AutoField(primary_key=True, db_column='id_local')
     ambientes = models.ManyToManyField(Ambiente, through='LocalAmbiente')
     ubigeo = models.ForeignKey(Ubigeo)
+    zona = models.CharField(max_length=5, blank=True, null=True)
     id_curso = models.ForeignKey('Curso')
     nombre_local = models.CharField(max_length=300, blank=True, null=True)
     tipo_via = models.CharField(max_length=300, blank=True, null=True)
@@ -120,7 +139,9 @@ class Local(models.Model):
     fecha_inicio = models.CharField(max_length=100, blank=True, null=True)
     fecha_fin = models.CharField(max_length=100, blank=True, null=True)
     turno_uso_local = models.CharField(max_length=100, blank=True, null=True)
-    capacidad_local = models.IntegerField(blank=True, null=True)
+    capacidad_local_total = models.IntegerField(blank=True, null=True)
+    capacidad_local_disponible = models.IntegerField(blank=True, null=True)
+    capacidad_local_usar = models.IntegerField(blank=True, null=True)
     funcionario_nombre = models.CharField(max_length=100, blank=True, null=True)
     funcionario_email = models.CharField(max_length=100, blank=True, null=True)
     funcionario_telefono = models.CharField(max_length=100, blank=True, null=True)
@@ -131,16 +152,25 @@ class Local(models.Model):
     responsable_celular = models.CharField(max_length=100, blank=True, null=True)
     x = models.CharField(max_length=100, blank=True, null=True)
     y = models.CharField(max_length=100, blank=True, null=True)
+    cantidad_total_aulas = models.IntegerField(blank=True, null=True)
     cantidad_disponible_aulas = models.IntegerField(blank=True, null=True)
     cantidad_usar_aulas = models.IntegerField(blank=True, null=True)
+    cantidad_total_auditorios = models.IntegerField(blank=True, null=True)
     cantidad_disponible_auditorios = models.IntegerField(blank=True, null=True)
     cantidad_usar_auditorios = models.IntegerField(blank=True, null=True)
+    cantidad_total_sala = models.IntegerField(blank=True, null=True)
     cantidad_disponible_sala = models.IntegerField(blank=True, null=True)
     cantidad_usar_sala = models.IntegerField(blank=True, null=True)
+    cantidad_total_oficina = models.IntegerField(blank=True, null=True)
     cantidad_disponible_oficina = models.IntegerField(blank=True, null=True)
     cantidad_usar_oficina = models.IntegerField(blank=True, null=True)
+    cantidad_total_otros = models.IntegerField(blank=True, null=True)
     cantidad_disponible_otros = models.IntegerField(blank=True, null=True)
     cantidad_usar_otros = models.IntegerField(blank=True, null=True)
+
+    cantidad_total_computo = models.IntegerField(blank=True, null=True)
+    cantidad_disponible_computo = models.IntegerField(blank=True, null=True)
+    cantidad_usar_computo = models.IntegerField(blank=True, null=True)
 
     class Meta:
         managed = True
@@ -161,7 +191,7 @@ class CursoCriterio(models.Model):
     id_cursocriterio = models.AutoField(primary_key=True, db_column='id_cursocriterio')
     id_curso = models.ForeignKey('Curso', db_column='id_curso')
     id_criterio = models.ForeignKey('Criterio', db_column='id_criterio')
-    #descripcion_criterio = models.CharField(max_length=100, blank=True, null=True)
+    # descripcion_criterio = models.CharField(max_length=100, blank=True, null=True)
     ponderacion = models.IntegerField()
 
     class Meta:
@@ -170,3 +200,23 @@ class CursoCriterio(models.Model):
         db_table = 'CURSO_CRITERIO'
 
 
+class PEA(models.Model):
+    id_pea = models.AutoField(primary_key=True, db_column='id_pea')
+    id_per = models.CharField(max_length=8, blank=True, null=True)
+    dni = models.CharField(max_length=8, blank=True, null=True)
+    ape_paterno = models.CharField(max_length=100, blank=True, null=True, db_column='ape_paterno')
+    ape_materno = models.CharField(max_length=100, blank=True, null=True, db_column='ape_materno')
+    nombre = models.CharField(max_length=100, blank=True, null=True, db_column='nombre')
+    id_cargofuncional = models.IntegerField(db_column='id_cargofuncional')
+    cargo = models.CharField(max_length=50, blank=True, null=True, db_column='cargo')
+    ubigeo = models.ForeignKey('Ubigeo', db_column='ubigeo')
+
+    class Meta:
+        managed = True
+        db_table = 'PEA'
+
+
+class PEA_AULA(models.Model):
+    id_peaaula = models.AutoField(primary_key=True, db_column='id_peaaula')
+    id_pea = models.ForeignKey('PEA', db_column='id_pea')
+    id_localambiente = models.ForeignKey('LocalAmbiente', db_column='id_localambiente')

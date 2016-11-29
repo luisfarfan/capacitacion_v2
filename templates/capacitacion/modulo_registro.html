@@ -1,5 +1,4 @@
 {% extends "base/base.html" %}
-
 {% load staticfiles %}
 {% block title %}
     Modulo de Registro de Local y Aulas
@@ -13,8 +12,9 @@
         <li>
             <a href="#"><i class="icon-stack"></i> <span>Capacitación</span></a>
             <ul>
-                <li class="active"><a href="http://192.168.200.123:3000/modulo_registro">Modulo de Registro</a></li>
-                <li><a href="http://192.168.200.123:3000/cursos_evaluaciones">Cursos y Evaluaciones</a>
+                <li class="active"><a href="http://192.168.200.123:3000/modulo_registro">Modulo de Registro de Local</a>
+                </li>
+                {#                <li><a href="http://192.168.200.123:3000/cursos_evaluaciones">Cursos y Evaluaciones</a>#}
                 </li>
             </ul>
         </li>
@@ -25,7 +25,7 @@
 {% block content %}
     <div class="panel panel-flat">
         <div class="panel-heading">
-            <h5 class="panel-title">Ubigeo</h5>
+
             <div class="heading-elements">
                 <ul class="icons-list">
                     <li>
@@ -39,42 +39,53 @@
         </div>
         <div class="panel-body">
             <div class="row">
-                <div class="col-md-4">
-                    <div class="form-group">
-                        <label>Departamentos</label>
-                        <select id="departamentos" class="select">
-                            <option value="">Seleccione</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="form-group">
-                        <label>Provincias</label>
-                        <select id="provincias" class="select">
-                            <option value="">Seleccione</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="form-group">
-                        <label>Distritos</label>
-                        <select id="distritos" class="select">
-                            <option value="">Seleccione</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="text-left">
+                <div class="text-right">
                     <button type="button" class="btn btn-primary btn-sm" data-toggle="modal"
                             data-target="#modal_localesbyubigeo" id="buscarlocal" class="btn btn-primary">
                         Buscar Local <i
                             class="icon-arrow-right14 position-right"></i></button>
                 </div>
             </div>
+            <br>
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label>Departamento</label>
+                        <select id="departamentos" class="select">
+                            <option value="">Seleccione</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label>Provincia</label>
+                        <select id="provincias" class="select">
+                            <option value="">Seleccione</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label>Distrito</label>
+                        <select id="distritos" class="select">
+                            <option value="">Seleccione</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label>Zona</label>
+                        <select id="zona" class="select">
+                            <option value="">Seleccione</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
     <div class="panel panel-flat">
         <div class="panel-heading">
-            <h5 class="panel-title">Registrar Local</h5>
+            {#            <h5 class="panel-title">Registrar Local</h5>#}
             <div class="heading-elements">
                 <ul class="icons-list">
                     <li>
@@ -110,10 +121,40 @@
                                     </select>
                                 </div>
                             </div>
+                            <div class="col-md-4">
+                                <table class="table table-responsive table-bordered">
+                                    <thead>
+                                    <tr>
+                                        <th colspan="4" scope="col">CAPACIDAD DE LOCAL</th>
+                                    </tr>
+                                    <tr>
+                                        <th scope="col">TOTAL</th>
+                                        <th scope="col">DISPONIBLE</th>
+                                        <th scope="col">A USAR</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                        <td><input type="text" name="capacidad_local_total"
+                                                   id="capacidad_local_total"
+                                                   required class="form-control" value="0">
+                                        </td>
+                                        <td><input type="text" name="capacidad_local_disponible"
+                                                   id="capacidad_local_disponible" required
+                                                   class="form-control" value="0">
+                                        </td>
+                                        <td><input type="text" name="capacidad_local_usar"
+                                                   id="capacidad_local_usar" required
+                                                   class="form-control" value="0">
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </fieldset>
                     <fieldset class="content-group">
-                        <legend class=" text-bold">NOMBRE DEL LOCAL Y DIRECCIÓN</legend>
+                        <legend class=" text-bold"></legend>
                         <div class="row">
                             <div class="col-md-3">
                                 <div class="form-group">
@@ -124,21 +165,21 @@
                             </div>
                             <div class="col-md-3">
                                 <div class="form-group">
-                                    <label>Tipo de Via</label>
+                                    <label>Tipo de Vía</label>
                                     <select name="tipo_via" class="select" id="tipo_via">
                                         <option value="">Seleccione</option>
                                         <option value="1">AVENIDA</option>
                                         <option value="2">CALLE</option>
                                         <option value="3">JIRÓN</option>
                                         <option value="4">PASAJE</option>
-                                        <option value="5">CARRETARA</option>
+                                        <option value="5">CARRETERA</option>
                                         <option value="6">OTRO</option>
                                     </select>
                                 </div>
                             </div>
                             <div class="col-md-3">
                                 <div class="form-group">
-                                    <label>Nombre de Via (Dirección)</label>
+                                    <label>Nombre de Vía</label>
                                     <div class="input-group">
 												<span class="input-group-btn">
 													<button id="abrir_mapa" class="btn btn-default btn-icon legitRipple"
@@ -214,7 +255,7 @@
                         </div>
                     </fieldset>
                     <fieldset class="content-group">
-                        <legend class="text-bold">Programación y Capacidad de Local</legend>
+                        <legend class="text-bold">PERIODO DE CAPACITACIÓN Y CAPACIDAD</legend>
                         <div class="row">
                             <div class="col-md-3">
                                 <div class="form-group">
@@ -239,13 +280,6 @@
                                         <option value="2">NOCHE</option>
                                         <option value="3">TODO EL DIA</option>
                                     </select>
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="form-group">
-                                    <label>Capacidad de Local</label>
-                                    <input type="text" required="required" name="capacidad_local"
-                                           class="form-control" placeholder="">
                                 </div>
                             </div>
                         </div>
@@ -321,139 +355,198 @@
                     </fieldset>
                 </div>
                 <fieldset class="content-group" id="ambientesdata">
-                    <legend class="text-bold">Ambientes Disponibles</legend>
+                    <legend class="text-bold">Ambientes</legend>
                     <div class="row">
-                        <div class="col-md-2">
-                            <div class="checkbox">
-                                <label>
-                                    <input type="checkbox" id="aula" class="styled">
-                                    Aulas
-                                </label>
-                            </div>
+                        <div class="col-md-3">
+                            <table class="table table-responsive table-bordered">
+                                <thead>
+                                <tr>
+                                    <th colspan="4" scope="col">AULAS</th>
+                                </tr>
+                                <tr>
+                                    <th scope="col">TOTAL</th>
+                                    <th scope="col">DISPONIBLE</th>
+                                    <th scope="col">USAR</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td><input type="text" name="cantidad_total_aulas"
+                                               id="cantidad_total_aulas"
+                                               class="form-control" value="0">
+                                    </td>
+                                    <td><input type="text" name="cantidad_disponible_aulas"
+                                               id="cantidad_disponible_aulas"
+                                               class="form-control" value="0">
+                                    </td>
+                                    <td><input type="text" name="cantidad_usar_aulas"
+                                               id="cantidad_usar_aulas"
+                                               class="form-control" value="0">
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
                         </div>
-                        <div class="col-md-1">
-                            <div class="form-group">
-                                <label>Disponible</label>
-                                <input type="text" name="cantidad_disponible_aulas"
-                                       id="cantidad_disponible_aulas"
-                                       class="form-control" value="0">
-                            </div>
+                        <div class="col-md-3">
+                            <table class="table table-responsive table-bordered">
+                                <thead>
+                                <tr>
+                                    <th colspan="4" scope="col">AUDITORIOS</th>
+                                </tr>
+                                <tr>
+                                    <th scope="col">TOTAL</th>
+                                    <th scope="col">DISPONIBLE</th>
+                                    <th scope="col">USAR</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td><input type="text" name="cantidad_total_auditorios"
+                                               id="cantidad_total_auditorios"
+                                               class="form-control" value="0">
+                                    </td>
+                                    <td><input type="text" name="cantidad_disponible_auditorios"
+                                               id="cantidad_disponible_auditorios"
+                                               class="form-control" value="0">
+                                    </td>
+                                    <td><input type="text" name="cantidad_usar_auditorios"
+                                               id="cantidad_usar_auditorios"
+                                               class="form-control" value="0">
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
                         </div>
-                        <div class="col-md-1">
-                            <div class="form-group">
-                                <label>A usar</label>
-                                <input type="text" name="cantidad_usar_aulas"
-                                       id="cantidad_usar_aulas"
-                                       class="form-control" value="0">
-                            </div>
+                        <div class="col-md-3">
+                            <table class="table table-responsive table-bordered">
+                                <thead>
+                                <tr>
+                                    <th colspan="4" scope="col">SALA DE REUNIÓN</th>
+                                </tr>
+                                <tr>
+                                    <th scope="col">TOTAL</th>
+                                    <th scope="col">DISPONIBLE</th>
+                                    <th scope="col">USAR</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td><input type="text" name="cantidad_total_sala"
+                                               id="cantidad_total_sala"
+                                               class="form-control" value="0">
+                                    </td>
+                                    <td><input type="text" name="cantidad_disponible_sala"
+                                               id="cantidad_disponible_sala"
+                                               class="form-control" value="0">
+                                    </td>
+                                    <td><input type="text" name="cantidad_usar_sala"
+                                               id="cantidad_usar_sala"
+                                               class="form-control" value="0">
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
                         </div>
-                        <div class="col-md-2">
-                            <div class="checkbox">
-                                <label>
-                                    <input type="checkbox" id="auditorio" class="styled">
-                                    Auditorios
-                                </label>
-                            </div>
-                        </div>
-                        <div class="col-md-1">
-                            <div class="form-group">
-                                <label>Disponible</label>
-                                <input type="text" name="cantidad_disponible_auditorios"
-                                       id="cantidad_disponible_auditorios"
-                                       class="form-control" value="0" >
-                            </div>
-                        </div>
-                        <div class="col-md-1">
-                            <div class="form-group">
-                                <label>A usar</label>
-                                <input type="text" name="cantidad_usar_auditorios"
-                                       id="cantidad_usar_auditorios"
-                                       class="form-control" value="0" >
-                            </div>
-                        </div>
-                        <div class="col-md-2">
-                            <div class="checkbox">
-                                <label>
-                                    <input type="checkbox" id="sala" class="styled">
-                                    Sala Reunion
-                                </label>
-                            </div>
-                        </div>
-                        <div class="col-md-1">
-                            <div class="form-group">
-                                <label>Disponible</label>
-                                <input type="text"
-                                       name="cantidad_disponible_sala" class="form-control"
-                                       id="cantidad_disponible_sala"
-                                       value="0" >
-                            </div>
-                        </div>
-                        <div class="col-md-1">
-                            <div class="form-group">
-                                <label>A usar</label>
-                                <input type="text"
-                                       name="cantidad_usar_sala" class="form-control"
-                                       id="cantidad_usar_sala"
-                                       value="0" >
-                            </div>
+                        <div class="col-md-3">
+                            <table class="table table-responsive table-bordered">
+                                <thead>
+                                <tr>
+                                    <th colspan="4" scope="col">OFICINA ADMINISTRATIVA</th>
+                                </tr>
+                                <tr>
+                                    <th scope="col">TOTAL</th>
+                                    <th scope="col">DISPONIBLE</th>
+                                    <th scope="col">USAR</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td><input type="text" name="cantidad_total_oficina"
+                                               id="cantidad_total_oficina"
+                                               class="form-control" value="0">
+                                    </td>
+                                    <td><input type="text" name="cantidad_disponible_oficina"
+                                               id="cantidad_disponible_oficina"
+                                               class="form-control" value="0">
+                                    </td>
+                                    <td><input type="text" name="cantidad_usar_oficina"
+                                               id="cantidad_usar_oficina"
+                                               class="form-control" value="0">
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-2">
-                            <div class="checkbox">
-                                <label>
-                                    <input type="checkbox" id="oficina" class="styled">
-                                    Oficina Administrativa
-                                </label>
-                            </div>
+                        <div class="col-md-3">
+                            <table class="table table-responsive table-bordered">
+                                <thead>
+                                <tr>
+                                    <th colspan="4" scope="col">LABORATORIO DE CÓMPUTO</th>
+                                </tr>
+                                <tr>
+                                    <th scope="col">TOTAL</th>
+                                    <th scope="col">DISPONIBLE</th>
+                                    <th scope="col">USAR</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td><input type="text" name="cantidad_total_computo"
+                                               id="cantidad_total_computo"
+                                               class="form-control" value="0">
+                                    </td>
+                                    <td><input type="text" name="cantidad_disponible_computo"
+                                               id="cantidad_disponible_computo"
+                                               class="form-control" value="0">
+                                    </td>
+                                    <td><input type="text" name="cantidad_usar_computo"
+                                               id="cantidad_usar_computo"
+                                               class="form-control" value="0">
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
                         </div>
-                        <div class="col-md-1">
-                            <div class="form-group">
-                                <label>Disponible</label>
-                                <input type="text" name="cantidad_disponible_oficina"
-                                       id="cantidad_disponible_oficina"
-                                       class="form-control" value="0" >
-                            </div>
+                        <div class="col-md-3">
+                            <table class="table table-responsive table-bordered">
+                                <thead>
+                                <tr>
+                                    <th colspan="4" scope="col">OTROS</th>
+                                </tr>
+                                <tr>
+                                    <th scope="col">TOTAL</th>
+                                    <th scope="col">DISPONIBLE</th>
+                                    <th scope="col">USAR</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td><input type="text" name="cantidad_total_otros"
+                                               id="cantidad_total_otros"
+                                               class="form-control" value="0">
+                                    </td>
+                                    <td><input type="text" name="cantidad_disponible_otros"
+                                               id="cantidad_disponible_otros"
+                                               class="form-control" value="0">
+                                    </td>
+                                    <td><input type="text" name="cantidad_usar_otros"
+                                               id="cantidad_usar_otros"
+                                               class="form-control" value="0">
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
                         </div>
-                        <div class="col-md-1">
-                            <div class="form-group">
-                                <label>A usar</label>
-                                <input type="text" name="cantidad_usar_oficina"
-                                       id="cantidad_usar_oficina"
-                                       class="form-control" value="0" >
-                            </div>
-                        </div>
-                        <div class="col-md-2">
-                            <div class="checkbox">
-                                <label>
-                                    <input type="checkbox" id="otros" class="styled">
-                                    Otros
-                                </label>
-                            </div>
-                        </div>
-                        <div class="col-md-1">
-                            <div class="form-group">
-                                <label>Disponible</label>
-                                <input type="text" name="cantidad_disponible_otros"
-                                       id="cantidad_disponible_otros"
-                                       class="form-control" value="0" >
-                            </div>
-                        </div>
-                        <div class="col-md-1">
-                            <div class="form-group">
-                                <label>A usar</label>
-                                <input type="text" name="cantidad_usar_otros"
-                                       id="cantidad_usar_otros"
-                                       class="form-control" value="0" >
-                            </div>
-                        </div>
+
                     </div>
                 </fieldset>
                 <div class="row">
                     <div class="text-left">
-                        <button type="reset" class="btn btn-default" id="reset">Limpiar <i
+                        <button type="reset" class="btn btn-primary" id="reset">Limpiar <i
                                 class="icon-reload-alt position-right"></i></button>
-                        <button type="button" id="registrar" class="btn btn-primary">Registrar <i
+                        <button type="button" id="registrar" class="btn btn-primary">Guardar <i
                                 class="icon-arrow-right14 position-right"></i></button>
                         <button type="button" id="registrar_aulas_modal" data-toggle="modal"
                                 data-target="#modal_registroaula"
@@ -463,7 +556,6 @@
                                 class="icon-arrow-right14 position-right"></i></button>
                     </div>
                 </div>
-
             </form>
         </div>
     </div>
@@ -522,12 +614,6 @@
                                 </div>
                                 <div class="col-md-3">
                                     <div class="form-group">
-                                        <label>N°</label>
-                                        <input type="text" name="numero" class="form-control" required placeholder="">
-                                    </div>
-                                </div>
-                                <div class="col-md-3">
-                                    <div class="form-group">
                                         <label>Capacidad Ambiente</label>
                                         <input type="text" name="capacidad" class="form-control" required
                                                placeholder="">
@@ -545,116 +631,41 @@
                             <legend>Mobiliario</legend>
                             <div class="row">
                                 <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label>Mesas</label>
-                                        <input type="text" name="mesas_cant"
-                                               class="form-control" required placeholder="">
+                                    <div class="checkbox">
+                                        <label>
+                                            <input type="checkbox" name="mesas_cant" class="styled">
+                                            Mesas
+                                        </label>
                                     </div>
                                 </div>
                                 <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label>Sillas</label>
-                                        <input type="text" name="sillas_cant"
-                                               class="form-control" required placeholder="">
+                                    <div class="checkbox">
+                                        <label>
+                                            <input type="checkbox" name="sillas_cant" class="styled">
+                                            Sillas
+                                        </label>
                                     </div>
                                 </div>
                                 <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label>Capacidad Individuales</label>
-                                        <input type="text" name="carpindividuales_cant"
-                                               class="form-control" required placeholder="">
+                                    <div class="checkbox">
+                                        <label>
+                                            <input type="checkbox" name="carpindividuales_cant" class="styled">
+                                            Capacidad Individuales
+                                        </label>
                                     </div>
                                 </div>
                                 <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label>Carpetas Bipersonales</label>
-                                        <input type="text" name="carpbipersonales_cant"
-                                               class="form-control" required placeholder="">
+                                    <div class="checkbox">
+                                        <label>
+                                            <input type="checkbox" name="carpbipersonales_cant" class="styled">
+                                            Carpetas Bipersonales
+                                        </label>
                                     </div>
                                 </div>
                             </div>
                         </fieldset>
                         <fieldset>
                             <legend>Equipamiento</legend>
-                            <div class="row">
-                                <div class="col-md-4">
-                                    <div class="checkbox">
-                                        <label>
-                                            <input type="checkbox" name="puerta_chapa" class="styled">
-                                            Puerta con Chapa
-                                        </label>
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="checkbox">
-                                        <label>
-                                            <input type="checkbox" name="puerta_pestillocandado"
-                                                   class="styled">
-                                            Pestillo y Candado
-                                        </label>
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="checkbox">
-                                        <label>
-                                            <input type="checkbox" name="puerta_notiene" class="styled">
-                                            No Tiene
-                                        </label>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-4">
-                                    <div class="checkbox">
-                                        <label>
-                                            <input type="checkbox" name="sshh" class="styled">
-                                            SSHH Cercano a las Aulas
-                                        </label>
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="checkbox">
-                                        <label>
-                                            <input type="checkbox" name="alumbrado_electrico" class="styled">
-                                            Alumbrado eléctrico
-                                        </label>
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="checkbox">
-                                        <label>
-                                            <input type="checkbox" name="ventiladores" class="styled">
-                                            Ventiladores
-                                        </label>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-4">
-                                    <div class="checkbox">
-                                        <label>
-                                            <input type="checkbox" name="aireacondicionado" class="styled">
-                                            Aire Acondicionado
-                                        </label>
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="checkbox">
-                                        <label>
-                                            <input type="checkbox" name="pizarra_acrilica" class="styled">
-                                            Pizarra acrílica
-                                        </label>
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="checkbox">
-                                        <label>
-                                            <input type="checkbox" name="pizarra_cemento" class="styled">
-                                            Pizarra de Cemento
-                                        </label>
-                                    </div>
-                                </div>
-                            </div>
                             <div class="row">
                                 <div class="col-md-4">
                                     <div class="checkbox">
@@ -683,13 +694,13 @@
                             </div>
                         </fieldset>
                         <div class="text-left">
-                            <button type="button" class="btn btn-link" data-dismiss="modal">Cerrar</button>
-                            <button type="button" id="registrar_aula_submit" class="btn btn-primary">Registrar Aula</button>
-                            <button type="button" id="limpiar_form_aula" class="btn btn-primary">Limpiar</button>
+                            <button type="button" class="btn btn-primary" data-dismiss="modal">CERRAR</button>
+                            <button type="button" id="registrar_aula_submit" class="btn btn-primary">GUARDAR</button>
+                            <button type="button" id="limpiar_form_aula" class="btn btn-primary">LIMPIAR</button>
                         </div>
                     </form>
                     <div class="row">
-                        <table id="tabla_aulas" class="table table-responsive">
+                        <table id="tabla_aulas" class="table table-bordered table-responsive">
                             <thead>
                             <tr>
                                 <th>Número de Aula</th>
@@ -742,7 +753,7 @@
         // pick list containing a mix of places and predicted search terms.
         function initAutocomplete() {
             center = {
-                lat: $('#x').val() != '' ?  $('#x').val() : -12.034467,
+                lat: $('#x').val() != '' ? $('#x').val() : -12.034467,
                 lng: $('#y').val() != '' ? $('#y').val() : -77.095752
             };
             map = new google.maps.Map(document.getElementById('map-canvas'), {

@@ -15,7 +15,6 @@ import os
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.10/howto/deployment/checklist/
 
@@ -26,7 +25,6 @@ SECRET_KEY = ')$%2!h%pl$3aqv!t=i#1xc1z(i2=18d(k7#yq_n2$v0$6*fda!'
 DEBUG = True
 
 ALLOWED_HOSTS = []
-
 
 # Application definition
 
@@ -73,29 +71,25 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'intranet.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/1.10/ref/settings/#databases
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
-}
-"""
-DATABASES = {
-    'default': {
+    },
+    'segmentacion': {
         'ENGINE': 'sql_server.pyodbc',
-        'NAME': 'DB_CAPACITACION',
-        'USER': 'sa',
-        'PASSWORD': 'luis123',
-        'HOST': 'localhost',
+        'NAME': 'CPV_SEGMENTACION',
+        'USER': 'us_segmentacion_web',
+        'PASSWORD': 'u$s3g*mentaWeB',
+        'HOST': '172.18.1.41',
         'OPTIONS': {
             'driver': 'SQL Server',
         },
     },
 }
-"""
+
 # Password validation
 # https://docs.djangoproject.com/en/1.10/ref/settings/#auth-password-validators
 
@@ -113,7 +107,6 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
-
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.10/topics/i18n/

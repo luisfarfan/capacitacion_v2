@@ -1,15 +1,19 @@
 $('#registrar_aulas_modal').on('click', function () {
-    let ambientescheck = $('#ambientesdata :input[type="checkbox"]');
+    let ambientescheck = $('#ambientesdata :input[name*="usar"]');
     $('#id_ambiente').find('option').remove();
     let data = [{id: '', text: 'Seleccione'}];
     let html = '';
     $.each(ambientescheck, function (key, val) {
-        let texto = $(val).parent().parent().parent().text();
+        let texto = $(val).parent().parent().parent().parent().find('tr').eq(0).find('th').eq(0).text();
         let id = parseInt(key) + 1;
-        $(val).is(':checked') ? html += `<option value="${id}">${texto}</option>` : '';
+        $(val).val() != 0 ? html += `<option value="${id}">${texto}</option>` : '';
     });
     $('#id_ambiente').append(html);
     getLocalAmbientes();
+    resetForm('form_aula');
+    validator_aula.resetForm()
+    $('#msg_error').hide();
+
 });
 function setLocalAmbienteForm(id_localambiente) {
     $('#id_localambiente').val(id_localambiente);
@@ -31,9 +35,11 @@ function setLocalAmbienteForm(id_localambiente) {
 function getLocalAmbientes() {
     let id_local = $('#id_local').val();
     let url = `${BASE_URL}localambiente/${id_local}/`;
-    $('#tabla_aulas').find('tbody').html('');
+
     let html = '';
+    $('#tabla_aulas').dataTable().fnDestroy();
     $.getJSON(url, function (data) {
+        $('#tabla_aulas').find('tbody').empty();
         if (data.length > 0) {
             $.each(data, function (key, val) {
                 let ambiente = '';
@@ -57,7 +63,10 @@ function getLocalAmbientes() {
                 html += `<tr><td>${val.numero}</td><td>${ambiente}</td><td>${val.capacidad}</td><td><button onclick="setLocalAmbienteForm(${val.id_localambiente})">Editar</button></td></tr>`;
             });
             $('#tabla_aulas').find('tbody').html(html);
-
+            $('#tabla_aulas').DataTable({
+                "pageLength": 5,
+                "lengthMenu": [[5, 10, 30, -1], [5, 10, 30, "All"]]
+            });
         }
     });
 }
@@ -187,8 +196,8 @@ function validarCantidadAmbientes(ambientenum, ambiente_usar) {
                         confirmButtonColor: "#EF5350",
                         confirmButtonText: "Si!",
                         cancelButtonText: "No, Cancelar!",
-                        closeOnConfirm: false,
-                        closeOnCancel: false
+                        closeOnConfirm: true,
+                        closeOnCancel: true
                     }, function (isConfirm) {
                         window.onkeydown = null;
                         window.onfocus = null;
@@ -223,24 +232,24 @@ function dataSave() {
         title = 'Edición!';
         text = 'El Aula se ha editado con exito!';
         title_entry = 'Esta usted seguro de Editar el Aula?';
-        swal({
-            title: title,
-            text: text,
-            confirmButtonColor: "#66BB6A",
-            type: "success"
-        });
+        // swal({
+        //     title: title,
+        //     text: text,
+        //     confirmButtonColor: "#66BB6A",
+        //     type: "success"
+        // });
     } else {
         url = `${BASE_URL}rest/localambiente/`;
         method = 'POST';
         title = 'Agregado!';
         text = 'El Aula se ha Agregado con exito!';
         title_entry = 'Esta usted seguro de Agregar el Aula?'
-        swal({
-            title: title,
-            text: text,
-            confirmButtonColor: "#66BB6A",
-            type: "success"
-        });
+        // swal({
+        //     title: title,
+        //     text: text,
+        //     confirmButtonColor: "#66BB6A",
+        //     type: "success"
+        // });
     }
     let id_localambiente = $('#id_localambiente').val();
     let form_data = $('#form_aula :not(:checkbox)').serializeArray();
@@ -279,3 +288,42 @@ $('#limpiar_form_aula').on('click', function () {
     resetForm('form_aula');
     $('#id_localambiente').val('');
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

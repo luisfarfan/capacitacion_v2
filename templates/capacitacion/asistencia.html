@@ -1,0 +1,27 @@
+{% extends 'base/base.html' %}
+{% load staticfiles %}
+{% block content %}
+
+{% endblock %}
+
+
+{% block sidebar %}
+    <ul class="navigation navigation-main navigation-accordion">
+        <!-- Main -->
+        <li class="navigation-header"><span>Main</span> <i class="icon-menu" title="Main pages"></i>
+        </li>
+        <li>
+            <a href="#"><i class="icon-stack"></i> <span>Capacitación</span></a>
+            <ul>
+                <li><a href="http://192.168.200.123:3000/modulo_registro">Modulo de Registro</a></li>
+                <li class="active"><a href="http://192.168.200.123:3000/cursos_evaluaciones">Modulo de Asistencia</a>
+                </li>
+            </ul>
+        </li>
+        <!-- /main -->
+    </ul>
+{% endblock %}
+
+{% block js %}
+    <script type="text/javascript" src="{% static "assets/js/core/app.js" %}"></script>
+{% endblock %}

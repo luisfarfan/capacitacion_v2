@@ -56,6 +56,12 @@ $('#provincias').change(function () {
     $("#distritos").find('option').remove();
     getDistritos();
 });
+
+$('#distritos').change(function () {
+    $("#zonas").find('option').remove();
+    getZonas();
+});
+
 $('#buscarlocal').click(function () {
     getLocalesbyUbigeo();
 });
@@ -93,6 +99,21 @@ function getDistritos() {
         $('#distritos').select2({data: array_distritos});
     });
 }
+
+function getZonas() {
+    "use strict";
+    let array_zonas = [{id: '', text: 'Seleccione'}];
+    var ccdd = $('#departamentos').val();
+    var ccpp = $('#provincias').val();
+    var ccdi = $('#distritos').val();
+    $.getJSON(`${BASE_URL}zonas/${ccdd}${ccpp}${ccdi}/`, function (data) {
+        $.each(data, function (key, val) {
+            array_zonas.push({id: val.ZONA, text: val.ZONA})
+        });
+        $('#zona').select2({data: array_zonas});
+    });
+}
+
 
 function getLocalesbyUbigeo() {
     var ubigeo = `${$('#departamentos').val()}${$('#provincias').val()}${$('#distritos').val()}`;
@@ -141,65 +162,6 @@ function getLocal(id_local) {
 // To add the marker to the map, call setMap();
             marker.setMap(map);
             $('#pac-input').val($('input[name="nombre_via"]').val());
-            if (data.cantidad_disponible_aulas == 0) {
-                $('#cantidad_disponible_aulas').val(data.cantidad_disponible_aulas);
-                $('#cantidad_usar_aulas').val(data.cantidad_usar_aulas);
-                $('#aula').prop('checked', false);
-                $.uniform.update();
-            } else {
-                $('#cantidad_disponible_aulas').val(data.cantidad_disponible_aulas);
-                $('#cantidad_usar_aulas').val(data.cantidad_usar_aulas);
-                $('#aula').prop('checked', true);
-                $.uniform.update();
-            }
-
-            if (data.cantidad_disponible_auditorios == 0) {
-                $('#cantidad_disponible_auditorios').val(data.cantidad_disponible_auditorios);
-                $('#cantidad_usar_auditorios').val(data.cantidad_usar_auditorios);
-                $('#auditorio').prop('checked', false);
-                $.uniform.update();
-            } else {
-                $('#cantidad_disponible_auditorios').val(data.cantidad_disponible_auditorios);
-                $('#cantidad_usar_auditorios').val(data.cantidad_usar_auditorios);
-                $('#auditorio').prop('checked', true);
-                $.uniform.update();
-            }
-
-            if (data.cantidad_disponible_sala == 0) {
-                $('#cantidad_disponible_sala').val(data.cantidad_disponible_sala);
-                $('#cantidad_usar_sala').val(data.cantidad_usar_sala);
-                $('#sala').prop('checked', false);
-                $.uniform.update();
-            } else {
-                $('#cantidad_disponible_sala').val(data.cantidad_disponible_sala);
-                $('#cantidad_usar_sala').val(data.cantidad_usar_sala);
-                $('#sala').prop('checked', true);
-                $.uniform.update();
-            }
-
-            if (data.cantidad_disponible_oficina == 0) {
-                $('#cantidad_disponible_oficina').val(data.cantidad_disponible_oficina);
-                $('#cantidad_usar_oficina').val(data.cantidad_usar_oficina);
-                $('#oficina').prop('checked', false);
-                $.uniform.update();
-            } else {
-                $('#cantidad_disponible_oficina').val(data.cantidad_disponible_oficina);
-                $('#cantidad_usar_oficina').val(data.cantidad_usar_oficina);
-                $('#oficina').prop('checked', true);
-                $.uniform.update();
-            }
-
-            if (data.cantidad_disponible_otros == 0) {
-                $('#cantidad_disponible_otros').val(data.cantidad_disponible_otros);
-                $('#cantidad_usar_otros').val(data.cantidad_usar_otros);
-                $('#otros').prop('checked', false);
-                $.uniform.update();
-            } else {
-                $('#cantidad_disponible_otros').val(data.cantidad_disponible_otros);
-                $('#cantidad_usar_otros').val(data.cantidad_usar_otros);
-                $('#otros').prop('checked', true);
-                $.uniform.update();
-            }
 
             $('#registrar_aulas_modal').prop('disabled', false);
             $('#modal_localesbyubigeo').modal('hide');
@@ -246,6 +208,27 @@ jQuery.validator.addMethod("esMenor", function (value, element) {
     var val_ne = $('#' + nameelement).val();
     return parseInt(value) <= parseInt(val_ne)
 }, jQuery.validator.format("Debe ser menor a Disponible"));
+
+jQuery.validator.addMethod("esMenor2", function (value, element) {
+    var nameelement = $(element).attr('name');
+    nameelement = nameelement.replace('disponible', 'total');
+    var val_ne = $('#' + nameelement).val();
+    return parseInt(value) <= parseInt(val_ne)
+}, jQuery.validator.format("Debe ser menor a Total"));
+
+
+jQuery.validator.addMethod("validar9", function (value, element) {
+    var count = 0;
+    if (value.length > 0) {
+        for (let k in value) {
+            if (value[0] == value[parseInt(k) + 1]) {
+                count++;
+            }
+        }
+    }
+    console.log(count);
+    return (count > 5) ? false : true;
+}, jQuery.validator.format("Número no permitido"));
 
 jQuery.validator.addMethod("validateFechaFin", function (value, element) {
     let fechafin = $('input[name="fecha_inicio"]').val();
@@ -309,7 +292,7 @@ var validator = $(".form-validate-jquery").validate({
     },
     validClass: "validation-valid-label",
     success: function (label) {
-        label.addClass("validation-valid-label").text("Success.")
+        label.addClass("validation-valid-label").text("Correcto.")
     },
     rules: {
         nombre_local: {
@@ -337,18 +320,16 @@ var validator = $(".form-validate-jquery").validate({
             range: [1, 5]
         },
         telefono_local_fijo: {
-            minlength: 7,
-            maxlength: 7
-        },
-        telefono_local_celular: {
             minlength: 9,
             maxlength: 9
         },
+        telefono_local_celular: {
+            minlength: 9,
+            maxlength: 10,
+            validar9: true
+        },
         capacidad_local: {
             range: [1, 9999]
-        },
-        fecha_inicio: {
-            validateFechaInicio: true,
         },
         fecha_fin: {
             validateFechaFin: true,
@@ -360,12 +341,13 @@ var validator = $(".form-validate-jquery").validate({
             email: true
         },
         funcionario_telefono: {
-            minlength: 7,
-            maxlength: 7
+            minlength: 9,
+            maxlength: 9
         },
         funcionario_celular: {
             minlength: 9,
-            maxlength: 9
+            maxlength: 10,
+            validar9: true
         },
         responsable_nombre: {
             minlength: 9,
@@ -374,26 +356,42 @@ var validator = $(".form-validate-jquery").validate({
             email: true
         },
         responsable_telefono: {
-            minlength: 7,
-            maxlength: 7
-        },
-        responsable_celular: {
             minlength: 9,
             maxlength: 9
         },
-        cantidad_usar_otros: {
-            esMenor: true
+        responsable_celular: {
+            minlength: 9,
+            maxlength: 10,
+            validar9: true
+        },
+        cantidad_disponible_aulas: {
+            esMenor2: true
+        },
+        cantidad_disponible_auditorios: {
+            esMenor2: true
+        },
+        cantidad_disponible_sala: {
+            esMenor2: true
+        },
+        cantidad_disponible_oficina: {
+            esMenor2: true
+        },
+        cantidad_disponible_otros: {
+            esMenor2: true
         },
         cantidad_usar_aulas: {
             esMenor: true
         },
-        cantidad_usar_oficina: {
+        cantidad_usar_auditorios: {
             esMenor: true
         },
         cantidad_usar_sala: {
             esMenor: true
         },
-        cantidad_usar_auditorios: {
+        cantidad_usar_oficina: {
+            esMenor: true
+        },
+        cantidad_usar_otros: {
             esMenor: true
         },
     },
@@ -431,15 +429,15 @@ $('#registrar').on('click', function () {
     }
     if (validator.numberOfInvalids() == 0) {
         swal({
-                title: "Esta usted seguro de Agregar el Local?",
+                title: title_entry,
                 text: "",
                 type: "success",
                 showCancelButton: true,
                 confirmButtonColor: "#EF5350",
                 confirmButtonText: "Si!",
                 cancelButtonText: "No, Cancelar!",
-                closeOnConfirm: false,
-                closeOnCancel: false
+                closeOnConfirm: true,
+                closeOnCancel: true
             },
             function (isConfirm) {
                 window.onkeydown = null;
@@ -452,123 +450,18 @@ $('#registrar').on('click', function () {
                         datapost[val.name] = val.value;
                     });
                     datapost['ubigeo'] = `${$('#departamentos').val()}${$('#provincias').val()}${$('#distritos').val()}`;
+                    datapost['zona'] = `${$('#zona').val()}}`;
 
                     $.ajax({
                         method: method,
                         data: datapost,
                         url: url,
                         success: function (data) {
-                            swal({
-                                title: title,
-                                text: text,
-                                confirmButtonColor: "#66BB6A",
-                                type: "success"
-                            });
                             resetForm('form_local');
                             validator.resetForm();
                         }
                     });
                 }
-                else {
-                    swal({
-                        title: "Cancelado",
-                        text: "La acción fue cancelada",
-                        confirmButtonColor: "#2196F3",
-                        type: "error"
-                    });
-                }
             });
     }
 });
-
-$('#aula').change(function () {
-    if ($(this).is(':checked')) {
-        $('#cantidad_disponible_aulas').prop('readonly', false);
-        $('#cantidad_disponible_aulas').prop('required', true);
-        $('#cantidad_usar_aulas').prop('readonly', false);
-        $('#cantidad_usar_aulas').prop('required', true);
-
-        $('#cantidad_disponible_aulas').focus()
-    } else {
-        $('#cantidad_disponible_aulas').prop('readonly', false);
-        $('#cantidad_disponible_aulas').val("0");
-        $('#cantidad_disponible_aulas').prop('required', false);
-
-        $('#cantidad_usar_aulas').prop('readonly', false);
-        $('#cantidad_usar_aulas').val("0");
-        $('#cantidad_usar_aulas').prop('required', false);
-    }
-    $.uniform.update();
-})
-$('#auditorio').change(function () {
-    if ($(this).is(':checked')) {
-        $('#cantidad_disponible_auditorios').prop('readonly', false);
-        $('#cantidad_disponible_auditorios').prop('required', true);
-
-        $('#cantidad_usar_auditorios').prop('readonly', false);
-        $('#cantidad_usar_auditorios').prop('required', true);
-        $('#cantidad_disponible_auditorios').focus()
-    } else {
-        $('#cantidad_disponible_auditorios').prop('readonly', false);
-        $('#cantidad_disponible_auditorios').val("0");
-        $('#cantidad_disponible_auditorios').prop('required', false);
-
-        $('#cantidad_usar_auditorios').prop('readonly', false);
-        $('#cantidad_usar_auditorios').val("0");
-        $('#cantidad_usar_auditorios').prop('required', false);
-    }
-    $.uniform.update();
-})
-$('#oficina').change(function () {
-    if ($(this).is(':checked')) {
-        $('#cantidad_disponible_oficina').prop('readonly', false);
-        $('#cantidad_disponible_oficina').prop('required', true);
-
-        $('#cantidad_usar_oficina').prop('readonly', false);
-        $('#cantidad_usar_oficina').prop('required', true);
-        $('#cantidad_disponible_oficina').focus()
-    } else {
-        $('#cantidad_disponible_oficina').prop('readonly', false);
-        $('#cantidad_disponible_oficina').val("0");
-        $('#cantidad_disponible_oficina').prop('required', false);
-
-        $('#cantidad_usar_oficina').prop('readonly', false);
-        $('#cantidad_usar_oficina').val("0");
-        $('#cantidad_usar_oficina').prop('required', false);
-    }
-    $.uniform.update();
-})
-$('#sala').change(function () {
-    if ($(this).is(':checked')) {
-        $('#cantidad_disponible_sala').prop('readonly', false);
-        $('#cantidad_disponible_sala').prop('required', true);
-
-        $('#cantidad_usar_sala').prop('readonly', false);
-        $('#cantidad_usar_sala').prop('required', true);
-        $('#cantidad_disponible_sala').focus()
-    } else {
-        $('#cantidad_disponible_sala').prop('readonly', false);
-        $('#cantidad_disponible_sala').val("0");
-        $('#cantidad_disponible_sala').prop('required', false);
-
-        $('#cantidad_usar_sala').prop('readonly', false);
-        $('#cantidad_usar_sala').val("0");
-        $('#cantidad_usar_sala').prop('required', false);
-    }
-    $.uniform.update();
-})
-$('#otros').change(function () {
-    if ($(this).is(':checked')) {
-        $('#cantidad_disponible_otros').prop('readonly', false);
-        $('#cantidad_disponible_otros').prop('required', true);
-
-        $('#cantidad_usar_otros').prop('readonly', false);
-        $('#cantidad_usar_otros').prop('required', true);
-        $('#cantidad_disponible_otros').focus()
-    } else {
-        $('#cantidad_usar_otros').prop('readonly', false);
-        $('#cantidad_usar_otros').val("0");
-        $('#cantidad_usar_otros').prop('required', false);
-    }
-    $.uniform.update();
-})
