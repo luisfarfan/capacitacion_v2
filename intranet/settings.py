@@ -87,7 +87,7 @@ DATABASES = {
         'PASSWORD': 'cap5wegU$re',
         'HOST': '172.18.1.41',
         'OPTIONS': {
-            'driver': 'SQL Server',
+            'driver': 'ODBC Driver 11 for SQL Server',
         },
     },
     'segmentacion': {
@@ -97,7 +97,7 @@ DATABASES = {
         'PASSWORD': 'u$s3g*mentaWeB',
         'HOST': '172.18.1.41',
         'OPTIONS': {
-            'driver': 'SQL Server',
+            'driver': 'ODBC Driver 11 for SQL Server',
         },
     },
 }
