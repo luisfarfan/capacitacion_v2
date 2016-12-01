@@ -116,6 +116,7 @@ class LocalAmbiente(models.Model):
     def save(self, *args, **kwargs):
         self.numero = LocalAmbiente.objects.filter(id_local=self.id_local, id_ambiente=self.id_ambiente).count()
         self.numero = self.numero + 1
+
         return super(LocalAmbiente, self).save(*args, **kwargs)
 
 
@@ -126,6 +127,7 @@ class Local(models.Model):
     zona = models.CharField(max_length=5, blank=True, null=True)
     id_curso = models.ForeignKey('Curso')
     nombre_local = models.CharField(max_length=300, blank=True, null=True)
+    zona_ubicacion_local = models.CharField(max_length=5, blank=True, null=True)
     tipo_via = models.CharField(max_length=300, blank=True, null=True)
     nombre_via = models.CharField(max_length=300, blank=True, null=True)
     referencia = models.CharField(max_length=300, blank=True, null=True)
@@ -167,7 +169,7 @@ class Local(models.Model):
     cantidad_total_otros = models.IntegerField(blank=True, null=True)
     cantidad_disponible_otros = models.IntegerField(blank=True, null=True)
     cantidad_usar_otros = models.IntegerField(blank=True, null=True)
-
+    especifique_otros = models.CharField(max_length=100, blank=True, null=True)
     cantidad_total_computo = models.IntegerField(blank=True, null=True)
     cantidad_disponible_computo = models.IntegerField(blank=True, null=True)
     cantidad_usar_computo = models.IntegerField(blank=True, null=True)
@@ -209,6 +211,8 @@ class PEA(models.Model):
     nombre = models.CharField(max_length=100, blank=True, null=True, db_column='nombre')
     id_cargofuncional = models.IntegerField(db_column='id_cargofuncional')
     cargo = models.CharField(max_length=50, blank=True, null=True, db_column='cargo')
+    id_convocatoriacargo = models.CharField(max_length=4, blank=True, null=True, db_column='id_convocatoriacargo')
+    zona = models.CharField(max_length=5, blank=True, null=True, db_column='zona')
     ubigeo = models.ForeignKey('Ubigeo', db_column='ubigeo')
 
     class Meta:
@@ -220,3 +224,7 @@ class PEA_AULA(models.Model):
     id_peaaula = models.AutoField(primary_key=True, db_column='id_peaaula')
     id_pea = models.ForeignKey('PEA', db_column='id_pea')
     id_localambiente = models.ForeignKey('LocalAmbiente', db_column='id_localambiente')
+
+    class Meta:
+        managed = True
+        db_table = 'PEA_AULA'

@@ -58,7 +58,8 @@ $('#provincias').change(function () {
 });
 
 $('#distritos').change(function () {
-    $("#zonas").find('option').remove();
+    $("#zona").find('option').remove();
+    $('#zona_ubicacion_local').find('option').remove();
     getZonas();
 });
 
@@ -111,6 +112,7 @@ function getZonas() {
             array_zonas.push({id: val.ZONA, text: val.ZONA})
         });
         $('#zona').select2({data: array_zonas});
+        $('#zona_ubicacion_local').select2({data: array_zonas});
     });
 }
 
@@ -125,12 +127,12 @@ function getLocalesbyUbigeo() {
             var html = '';
             $.each(data, function (key, val) {
                 html += `<tr><td>${val.nombre_local}</td><td>${val.nombre_via}</td><td>${val.referencia}</td><td>
-                    <button onclick=getLocal(${val.id_local}) type=button class='btn btn-info btn-float btn-rounded btn-loading' data-loading-text="<i class='icon-spinner4 spinner'></i>">
+                    <button onclick="getLocal(${val.id_local})" type="button"class="btn btn-info btn-float btn-rounded btn-loading" data-loading-text="<i class='icon-spinner4 spinner'></i>">
                     <i class="icon-spinner4"></i></button></button></td></tr>`;
             });
             console.log(html);
             $('#table_localesubigeo').find('tbody').html(html);
-            $('#table_localesubigeo').DataTable()
+            $('#table_localesubigeo').DataTable();
         }
     });
 }
@@ -142,7 +144,7 @@ function getLocal(id_local) {
         success: function (data) {
             console.log(data);
             $.each(data, function (key, val) {
-                if (key == 'tipo_via' || key == 'turno_uso_local' || key == 'id_curso') {
+                if (key == 'tipo_via' || key == 'turno_uso_local' || key == 'id_curso' || key == 'zona_ubicacion_local') {
                     $(`select[name=${key}]`).val(val).trigger('change')
                 } else {
                     $(`input[name=${key}]`).val(val)
@@ -157,6 +159,7 @@ function getLocal(id_local) {
                 position: new google.maps.LatLng(center.lat, center.lng),
                 title: "Aqui!"
             });
+            $('#capacidad_total').text(0);
             marker.setMap(map);
 
 // To add the marker to the map, call setMap();
@@ -165,10 +168,10 @@ function getLocal(id_local) {
 
             $('#registrar_aulas_modal').prop('disabled', false);
             $('#modal_localesbyubigeo').modal('hide');
+
+            getLocalAmbientes();
         }
     });
-
-
 }
 function getCursos(id_etapa) {
     $('#cursos').find('option').remove();
@@ -450,7 +453,7 @@ $('#registrar').on('click', function () {
                         datapost[val.name] = val.value;
                     });
                     datapost['ubigeo'] = `${$('#departamentos').val()}${$('#provincias').val()}${$('#distritos').val()}`;
-                    datapost['zona'] = `${$('#zona').val()}}`;
+                    datapost['zona'] = `${$('#zona').val()}`;
 
                     $.ajax({
                         method: method,
@@ -459,9 +462,82 @@ $('#registrar').on('click', function () {
                         success: function (data) {
                             resetForm('form_local');
                             validator.resetForm();
+                            $('#tabla_aulas').dataTable().fnDestroy();
                         }
                     });
                 }
             });
     }
+});
+
+function getLocalAmbientes() {
+    let id_local = $('#id_local').val();
+    let url = `${BASE_URL}localambiente/${id_local}/`;
+
+    let html = '';
+    $('#tabla_aulas').dataTable().fnDestroy();
+
+    $.getJSON(url, function (data) {
+        let capacidad_total = 0;
+        $('#tabla_aulas').find('tbody').empty();
+        if (data.length > 0) {
+            $.each(data, function (key, val) {
+                capacidad_total = capacidad_total + parseInt(val.capacidad);
+                let ambiente = '';
+                console.log(val);
+                switch (val.id_ambiente) {
+                    case 1:
+                        ambiente = 'Aula';
+                        break;
+                    case 2:
+                        ambiente = 'Auditorios';
+                        break;
+                    case 3:
+                        ambiente = 'Sala Reunion';
+                        break;
+                    case 4:
+                        ambiente = 'Oficina Administrativa';
+                        break;
+                    case 5:
+                        ambiente = 'Laboratorio de Computo';
+                        break;
+                    case 6:
+                        ambiente = 'Otros';
+                        break;
+                }
+                html += `<tr><td>${val.numero}</td><td>${ambiente}</td><td>${val.capacidad}</td><td><button type="button" onclick="setLocalAmbienteForm(${val.id_localambiente})">Editar</button></td></tr>`;
+            });
+            console.log(capacidad_total);
+            $('#capacidad_total').text(capacidad_total);
+            $('#tabla_aulas').find('tbody').html(html);
+            $('#tabla_aulas').DataTable({
+                "pageLength": 5,
+                "lengthMenu": [[5, 10, 30, -1], [5, 10, 30, "All"]]
+            });
+        }
+    });
+}
+
+function AddEditAula() {
+    "use strict";
+    let ambientescheck = $('#ambientesdata :input[name*="usar"]');
+    $('#id_ambiente').find('option').remove();
+    let data = [{id: '', text: 'Seleccione'}];
+    let html = '';
+    $.each(ambientescheck, function (key, val) {
+        let texto = $(val).parent().parent().find('td').eq(0).text();
+        let id = parseInt(key) + 1;
+        $(val).val() != 0 ? html += `<option value="${id}">${texto}</option>` : '';
+    });
+    $('#id_ambiente').append(html);
+    getLocalAmbientes();
+    resetForm('form_aula');
+    validator_aula.resetForm()
+    $('#msg_error').hide();
+}
+
+
+$('#cantidad_usar_otros').keyup(e => {
+    "use strict";
+    ($('#cantidad_usar_otros').val() == '' || $('#cantidad_usar_otros').val() == 0) ? $('#especifique_otros').prop('readonly', true) : $('#especifique_otros').prop('readonly', false)
 });

@@ -1,73 +1,21 @@
 $('#registrar_aulas_modal').on('click', function () {
-    let ambientescheck = $('#ambientesdata :input[name*="usar"]');
-    $('#id_ambiente').find('option').remove();
-    let data = [{id: '', text: 'Seleccione'}];
-    let html = '';
-    $.each(ambientescheck, function (key, val) {
-        let texto = $(val).parent().parent().parent().parent().find('tr').eq(0).find('th').eq(0).text();
-        let id = parseInt(key) + 1;
-        $(val).val() != 0 ? html += `<option value="${id}">${texto}</option>` : '';
-    });
-    $('#id_ambiente').append(html);
-    getLocalAmbientes();
-    resetForm('form_aula');
-    validator_aula.resetForm()
-    $('#msg_error').hide();
-
+    AddEditAula();
 });
+
 function setLocalAmbienteForm(id_localambiente) {
     $('#id_localambiente').val(id_localambiente);
     let url = `${BASE_URL}rest/localambiente/${id_localambiente}/`;
     resetForm('form_aula');
     $.getJSON(url, data=> {
         "use strict";
+        console.log(data);
+        AddEditAula();
         $.each(data, (key, val)=> {
-            if ($(`input[name=${key}]`).is(":checkbox") && val == "1") {
-                $(`input[name=${key}]`).prop('checked', true);
-                $.uniform.update()
-            } else {
-                $(`input[name=${key}]`).val(val).trigger('change');
-            }
+            $(`input[name=${key}]`).val(val);
         });
+        $('#modal_registroaula').modal('show');
         $('#id_ambiente').val(data.id_ambiente).trigger('change');
-    });
-}
-function getLocalAmbientes() {
-    let id_local = $('#id_local').val();
-    let url = `${BASE_URL}localambiente/${id_local}/`;
 
-    let html = '';
-    $('#tabla_aulas').dataTable().fnDestroy();
-    $.getJSON(url, function (data) {
-        $('#tabla_aulas').find('tbody').empty();
-        if (data.length > 0) {
-            $.each(data, function (key, val) {
-                let ambiente = '';
-                switch (val.id_ambiente) {
-                    case 1:
-                        ambiente = 'Aula';
-                        break;
-                    case 2:
-                        ambiente = 'Auditorios';
-                        break;
-                    case 3:
-                        ambiente = 'Sala Reunion';
-                        break;
-                    case 4:
-                        ambiente = 'Oficina Administrativa';
-                        break;
-                    case 5:
-                        ambiente = 'Otros';
-                        break;
-                }
-                html += `<tr><td>${val.numero}</td><td>${ambiente}</td><td>${val.capacidad}</td><td><button onclick="setLocalAmbienteForm(${val.id_localambiente})">Editar</button></td></tr>`;
-            });
-            $('#tabla_aulas').find('tbody').html(html);
-            $('#tabla_aulas').DataTable({
-                "pageLength": 5,
-                "lengthMenu": [[5, 10, 30, -1], [5, 10, 30, "All"]]
-            });
-        }
     });
 }
 
@@ -287,6 +235,7 @@ $('#limpiar_form_aula').on('click', function () {
     "use strict";
     resetForm('form_aula');
     $('#id_localambiente').val('');
+    $('#msg_error').hide();
 });
 
 

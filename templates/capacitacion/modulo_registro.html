@@ -121,36 +121,36 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-md-4">
-                                <table class="table table-responsive table-bordered">
-                                    <thead>
-                                    <tr>
-                                        <th colspan="4" scope="col">CAPACIDAD DE LOCAL</th>
-                                    </tr>
-                                    <tr>
-                                        <th scope="col">TOTAL</th>
-                                        <th scope="col">DISPONIBLE</th>
-                                        <th scope="col">A USAR</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <tr>
-                                        <td><input type="text" name="capacidad_local_total"
-                                                   id="capacidad_local_total"
-                                                   required class="form-control" value="0">
-                                        </td>
-                                        <td><input type="text" name="capacidad_local_disponible"
-                                                   id="capacidad_local_disponible" required
-                                                   class="form-control" value="0">
-                                        </td>
-                                        <td><input type="text" name="capacidad_local_usar"
-                                                   id="capacidad_local_usar" required
-                                                   class="form-control" value="0">
-                                        </td>
-                                    </tr>
-                                    </tbody>
-                                </table>
-                            </div>
+                            {#                            <div class="col-md-4">#}
+                            {#                                <table class="table table-responsive table-bordered">#}
+                            {#                                    <thead>#}
+                            {#                                    <tr>#}
+                            {#                                        <th colspan="4" scope="col">CAPACIDAD DE LOCAL</th>#}
+                            {#                                    </tr>#}
+                            {#                                    <tr>#}
+                            {#                                        <th scope="col">TOTAL</th>#}
+                            {#                                        <th scope="col">DISPONIBLE</th>#}
+                            {#                                        <th scope="col">A USAR</th>#}
+                            {#                                    </tr>#}
+                            {#                                    </thead>#}
+                            {#                                    <tbody>#}
+                            {#                                    <tr>#}
+                            {#                                        <td><input type="text" name="capacidad_local_total"#}
+                            {#                                                   id="capacidad_local_total"#}
+                            {#                                                   required class="form-control" value="0">#}
+                            {#                                        </td>#}
+                            {#                                        <td><input type="text" name="capacidad_local_disponible"#}
+                            {#                                                   id="capacidad_local_disponible" required#}
+                            {#                                                   class="form-control" value="0">#}
+                            {#                                        </td>#}
+                            {#                                        <td><input type="text" name="capacidad_local_usar"#}
+                            {#                                                   id="capacidad_local_usar" required#}
+                            {#                                                   class="form-control" value="0">#}
+                            {#                                        </td>#}
+                            {#                                    </tr>#}
+                            {#                                    </tbody>#}
+                            {#                                </table>#}
+                            {#                            </div>#}
                         </div>
                     </fieldset>
                     <fieldset class="content-group">
@@ -188,48 +188,53 @@
                                         <input type="text" required="required" name="nombre_via"
                                                class="form-control" placeholder="">
                                     </div>
-
-
                                 </div>
                             </div>
                             <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Zona N° Ubicacion del local</label>
+                                    <select name="zona_ubicacion_local" class="form-control" id="zona_ubicacion_local">
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-7">
                                 <div class="form-group">
                                     <label>Referencia</label>
                                     <input type="text" name="referencia"
                                            class="form-control" placeholder="">
                                 </div>
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-2">
+                            <div class="col-md-1">
                                 <div class="form-group">
                                     <label>N°Puerta</label>
                                     <input type="text" required="required" name="n_direccion"
                                            class="form-control" placeholder="">
                                 </div>
                             </div>
-                            <div class="col-md-2">
+                            <div class="col-md-1">
                                 <div class="form-group">
                                     <label>MZ</label>
                                     <input type="text" name="mz_direccion"
                                            class="form-control" placeholder="">
                                 </div>
                             </div>
-                            <div class="col-md-2">
+                            <div class="col-md-1">
                                 <div class="form-group">
                                     <label>Lote</label>
                                     <input type="text" name="lote_direccion"
                                            class="form-control" placeholder="">
                                 </div>
                             </div>
-                            <div class="col-md-2">
+                            <div class="col-md-1">
                                 <div class="form-group">
                                     <label>KM</label>
                                     <input type="text" name="km_direccion"
                                            class="form-control" placeholder="">
                                 </div>
                             </div>
-                            <div class="col-md-2">
+                            <div class="col-md-1">
                                 <div class="form-group">
                                     <label>Piso</label>
                                     <input type="text" required="required" name="piso_direccion"
@@ -255,7 +260,7 @@
                         </div>
                     </fieldset>
                     <fieldset class="content-group">
-                        <legend class="text-bold">PERIODO DE CAPACITACIÓN Y CAPACIDAD</legend>
+                        <legend class="text-bold">PERIODO DE CAPACITACIÓN Y TURNO</legend>
                         <div class="row">
                             <div class="col-md-3">
                                 <div class="form-group">
@@ -357,20 +362,19 @@
                 <fieldset class="content-group" id="ambientesdata">
                     <legend class="text-bold">Ambientes</legend>
                     <div class="row">
-                        <div class="col-md-3">
+                        <div class="col-md-8 col-md-offset-2">
                             <table class="table table-responsive table-bordered">
                                 <thead>
                                 <tr>
-                                    <th colspan="4" scope="col">AULAS</th>
-                                </tr>
-                                <tr>
-                                    <th scope="col">TOTAL</th>
-                                    <th scope="col">DISPONIBLE</th>
-                                    <th scope="col">USAR</th>
+                                    <th>Tipo de Ambiente</th>
+                                    <th>Total</th>
+                                    <th>Disponible</th>
+                                    <th>A usar</th>
                                 </tr>
                                 </thead>
                                 <tbody>
                                 <tr>
+                                    <td>Aula</td>
                                     <td><input type="text" name="cantidad_total_aulas"
                                                id="cantidad_total_aulas"
                                                class="form-control" value="0">
@@ -384,23 +388,8 @@
                                                class="form-control" value="0">
                                     </td>
                                 </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                        <div class="col-md-3">
-                            <table class="table table-responsive table-bordered">
-                                <thead>
                                 <tr>
-                                    <th colspan="4" scope="col">AUDITORIOS</th>
-                                </tr>
-                                <tr>
-                                    <th scope="col">TOTAL</th>
-                                    <th scope="col">DISPONIBLE</th>
-                                    <th scope="col">USAR</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <tr>
+                                    <td>Auditorio</td>
                                     <td><input type="text" name="cantidad_total_auditorios"
                                                id="cantidad_total_auditorios"
                                                class="form-control" value="0">
@@ -414,23 +403,8 @@
                                                class="form-control" value="0">
                                     </td>
                                 </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                        <div class="col-md-3">
-                            <table class="table table-responsive table-bordered">
-                                <thead>
                                 <tr>
-                                    <th colspan="4" scope="col">SALA DE REUNIÓN</th>
-                                </tr>
-                                <tr>
-                                    <th scope="col">TOTAL</th>
-                                    <th scope="col">DISPONIBLE</th>
-                                    <th scope="col">USAR</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <tr>
+                                    <td>Sala de Reuniones</td>
                                     <td><input type="text" name="cantidad_total_sala"
                                                id="cantidad_total_sala"
                                                class="form-control" value="0">
@@ -444,23 +418,8 @@
                                                class="form-control" value="0">
                                     </td>
                                 </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                        <div class="col-md-3">
-                            <table class="table table-responsive table-bordered">
-                                <thead>
                                 <tr>
-                                    <th colspan="4" scope="col">OFICINA ADMINISTRATIVA</th>
-                                </tr>
-                                <tr>
-                                    <th scope="col">TOTAL</th>
-                                    <th scope="col">DISPONIBLE</th>
-                                    <th scope="col">USAR</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <tr>
+                                    <td>Oficina Administrativa</td>
                                     <td><input type="text" name="cantidad_total_oficina"
                                                id="cantidad_total_oficina"
                                                class="form-control" value="0">
@@ -474,25 +433,8 @@
                                                class="form-control" value="0">
                                     </td>
                                 </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-3">
-                            <table class="table table-responsive table-bordered">
-                                <thead>
                                 <tr>
-                                    <th colspan="4" scope="col">LABORATORIO DE CÓMPUTO</th>
-                                </tr>
-                                <tr>
-                                    <th scope="col">TOTAL</th>
-                                    <th scope="col">DISPONIBLE</th>
-                                    <th scope="col">USAR</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <tr>
+                                    <td>Sala de Cómputo</td>
                                     <td><input type="text" name="cantidad_total_computo"
                                                id="cantidad_total_computo"
                                                class="form-control" value="0">
@@ -506,23 +448,8 @@
                                                class="form-control" value="0">
                                     </td>
                                 </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                        <div class="col-md-3">
-                            <table class="table table-responsive table-bordered">
-                                <thead>
                                 <tr>
-                                    <th colspan="4" scope="col">OTROS</th>
-                                </tr>
-                                <tr>
-                                    <th scope="col">TOTAL</th>
-                                    <th scope="col">DISPONIBLE</th>
-                                    <th scope="col">USAR</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <tr>
+                                    <td>Otro</td>
                                     <td><input type="text" name="cantidad_total_otros"
                                                id="cantidad_total_otros"
                                                class="form-control" value="0">
@@ -535,11 +462,40 @@
                                                id="cantidad_usar_otros"
                                                class="form-control" value="0">
                                     </td>
+                                    <td>Especifique: <input type="text" name="especifique_otros"
+                                                            id="especifique_otros"
+                                                            class="form-control" value="" readonly></td>
                                 </tr>
                                 </tbody>
                             </table>
                         </div>
+                    </div>
+                </fieldset>
+                <fieldset class="content-group">
+                    <legend></legend>
+                    <div class="row">
+                        <table id="tabla_aulas" class="table table-bordered table-responsive">
+                            <thead>
+                            <tr>
+                                <th>Número de Aula</th>
+                                <th>Tipo de Ambiente</th>
+                                <th>Capacidad</th>
+                                <th>Acción</th>
+                            </tr>
+                            </thead>
+                            <tbody>
 
+                            </tbody>
+                            <tfoot>
+                            <tr style="background-color:#A5C25C">
+                                <td colspan="2">TOTAL</td>
+                                <td>
+                                    <span id="capacidad_total"></span>
+                                </td>
+                                <td></td>
+                            </tr>
+                            </tfoot>
+                        </table>
                     </div>
                 </fieldset>
                 <div class="row">
@@ -605,90 +561,24 @@
                         <fieldset class="content-group">
                             <legend>Ambiente</legend>
                             <div class="row">
-                                <div class="col-md-3">
+                                <div class="col-md-4">
                                     <div class="form-group">
                                         <label>Ambiente</label>
-                                        <select name="id_ambiente" class="select2 select2 form-control"
+                                        <select name="id_ambiente" class="select2 form-control"
                                                 id="id_ambiente"></select>
                                     </div>
                                 </div>
-                                <div class="col-md-3">
+                                <div class="col-md-4">
                                     <div class="form-group">
                                         <label>Capacidad Ambiente</label>
                                         <input type="text" name="capacidad" class="form-control" required
                                                placeholder="">
                                     </div>
                                 </div>
-                                <div class="col-md-3">
+                                <div class="col-md-4">
                                     <div class="form-group">
                                         <label>Piso</label>
                                         <input type="text" name="n_piso" class="form-control" required placeholder="">
-                                    </div>
-                                </div>
-                            </div>
-                        </fieldset>
-                        <fieldset>
-                            <legend>Mobiliario</legend>
-                            <div class="row">
-                                <div class="col-md-3">
-                                    <div class="checkbox">
-                                        <label>
-                                            <input type="checkbox" name="mesas_cant" class="styled">
-                                            Mesas
-                                        </label>
-                                    </div>
-                                </div>
-                                <div class="col-md-3">
-                                    <div class="checkbox">
-                                        <label>
-                                            <input type="checkbox" name="sillas_cant" class="styled">
-                                            Sillas
-                                        </label>
-                                    </div>
-                                </div>
-                                <div class="col-md-3">
-                                    <div class="checkbox">
-                                        <label>
-                                            <input type="checkbox" name="carpindividuales_cant" class="styled">
-                                            Capacidad Individuales
-                                        </label>
-                                    </div>
-                                </div>
-                                <div class="col-md-3">
-                                    <div class="checkbox">
-                                        <label>
-                                            <input type="checkbox" name="carpbipersonales_cant" class="styled">
-                                            Carpetas Bipersonales
-                                        </label>
-                                    </div>
-                                </div>
-                            </div>
-                        </fieldset>
-                        <fieldset>
-                            <legend>Equipamiento</legend>
-                            <div class="row">
-                                <div class="col-md-4">
-                                    <div class="checkbox">
-                                        <label>
-                                            <input type="checkbox" name="proyector" class="styled">
-                                            Proyector
-                                        </label>
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="checkbox">
-                                        <label>
-                                            <input type="checkbox" name="computadora" class="styled">
-                                            Computadora
-                                        </label>
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="checkbox">
-                                        <label>
-                                            <input type="checkbox" name="acceso_internet" class="styled">
-                                            Acceso a Internet
-                                        </label>
                                     </div>
                                 </div>
                             </div>
@@ -699,21 +589,6 @@
                             <button type="button" id="limpiar_form_aula" class="btn btn-primary">LIMPIAR</button>
                         </div>
                     </form>
-                    <div class="row">
-                        <table id="tabla_aulas" class="table table-bordered table-responsive">
-                            <thead>
-                            <tr>
-                                <th>Número de Aula</th>
-                                <th>Tipo de Ambiente</th>
-                                <th>Capacidad</th>
-                                <th>Acción</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-
-                            </tbody>
-                        </table>
-                    </div>
                 </div>
 
                 <div class="modal-footer">

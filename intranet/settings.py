@@ -73,10 +73,22 @@ WSGI_APPLICATION = 'intranet.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/1.10/ref/settings/#databases
-DATABASES = {
-    'default': {
+"""
+'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    },
+"""
+DATABASES = {
+    'default': {
+        'ENGINE': 'sql_server.pyodbc',
+        'NAME': 'CPV_CAPACITACION',
+        'USER': 'us_capacitacion_web',
+        'PASSWORD': 'cap5wegU$re',
+        'HOST': '172.18.1.41',
+        'OPTIONS': {
+            'driver': 'SQL Server',
+        },
     },
     'segmentacion': {
         'ENGINE': 'sql_server.pyodbc',
@@ -129,3 +141,10 @@ STATICFILES_DIRS = [
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
 
 STATIC_URL = '/static/'
+CSRF_COOKIE_SECURE = True
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.BasicAuthentication',
+    )
+}

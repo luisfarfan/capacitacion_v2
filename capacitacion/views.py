@@ -7,7 +7,7 @@ from django.http import HttpResponse
 from django.template import loader
 from serializer import *
 from rest_framework import generics
-
+from django.views.decorators.csrf import csrf_exempt
 
 def modulo_registro(request):
     template = loader.get_template('capacitacion/modulo_registro.html')
@@ -140,3 +140,5 @@ class CursoCriteriobyCursoViewSet(generics.ListAPIView):
     def get_queryset(self):
         id_curso = self.kwargs['id_curso']
         return CursoCriterio.objects.filter(id_curso=id_curso)
+
+
