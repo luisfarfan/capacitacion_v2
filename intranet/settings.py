@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'intranetapp',
     'capacitacion',
+    'login',
     'rest_framework',
 ]
 
@@ -87,7 +88,7 @@ DATABASES = {
         'PASSWORD': 'cap5wegU$re',
         'HOST': '172.18.1.41',
         'OPTIONS': {
-            'driver': 'ODBC Driver 11 for SQL Server',
+            'driver': 'SQL Server',
         },
     },
     'segmentacion': {
@@ -97,7 +98,7 @@ DATABASES = {
         'PASSWORD': 'u$s3g*mentaWeB',
         'HOST': '172.18.1.41',
         'OPTIONS': {
-            'driver': 'ODBC Driver 11 for SQL Server',
+            'driver': 'SQL Server',
         },
     },
 }

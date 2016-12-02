@@ -12,6 +12,13 @@ class LocalSerializer(serializers.ModelSerializer):
         model = Local
 
 
+class LocalAulasSerializer(serializers.ModelSerializer):
+    ambientes = AmbienteSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Local
+
+
 class LocalAmbienteSerializer(serializers.ModelSerializer):
     class Meta:
         model = LocalAmbiente
@@ -30,3 +37,15 @@ class CriterioSerializer(serializers.ModelSerializer):
 class CursoCriterioSerializer(serializers.ModelSerializer):
     class Meta:
         model = CursoCriterio
+
+
+class PEASerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PEA
+
+
+class PEA_BY_AULASerializer(serializers.ModelSerializer):
+    pea = PEASerializer(many=True, read_only=True)
+
+    class Meta:
+        model = LocalAmbiente

@@ -198,7 +198,56 @@
 </body>
 <script>
     BASE_URL = `http://192.168.200.123:3000/`;
+    function setSelect(id, json, select2 = false) {
+        $('#' + id).find('option').remove();
+        let html = '';
+        $.each(json, function (key, val) {
+            html += `<option value="${val.id}">${val.text}</option>`
+        });
+        $('#' + id).html(html);
+        select2 ? $('#' + id).select2() : '';
+    }
+    function setSelect_v2(id, json, keys = [], select2 = false) {
+        console.log(keys);
+        $('#' + id).find('option').remove();
+
+        let html = '<option>Seleccione</option>';
+        $.each(json, function (key, val) {
+            html += `<option value="${val[keys[0]]}">${val[keys[1]]}</option>`
+        });
+        $('#' + id).html(html);
+        select2 ? $('#' + id).select2() : '';
+    }
+
+    function setTable(id, json, params, datatable = false, datatable_params = {}) {
+        let html = '';
+        $('#' + id).find('tbody').empty();
+        if (datatable) {
+            ('#' + id).DataTable({datatable_params})
+            ('#' + id).dataTable().fnDestroy();
+        }
+        $.each(json, (key, val)=> {
+            html += '<tr>';
+            html += `<td>${key + 1}</td>`;
+            for (let i in params) {
+                if (params[i].pk) {
+                    html += `<td><button onclick="getPEA(${val[params[i].pk]})" type="button">PEA</button></td>`;
+                } else {
+                    html += `<td>${val[params[i]]}</td>`;
+                }
+            }
+            html += '</tr>';
+        });
+        $('#' + id).find('tbody').html(html);
+
+        if (datatable) {
+            ('#' + id).DataTable({datatable_params})
+        }
+    }
+
 </script>
+
 {% block js %}
 {% endblock %}
+
 </html>

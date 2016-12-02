@@ -183,16 +183,6 @@ function getCursos(id_etapa) {
         setSelect('cursos', array_cursos);
     });
 }
-function setSelect(id, json, select2 = false) {
-    $('#' + id).find('option').remove();
-    let html = '';
-    $.each(json, function (key, val) {
-        html += `<option value="${val.id}">${val.text}</option>`
-    });
-    $('#' + id).html(html);
-    select2 ? $('#' + id).select2() : '';
-}
-
 jQuery.validator.addMethod("validateFechaInicio", function (value, element) {
     let fechafin = $('input[name="fecha_fin"]').val();
     var part_ff = fechafin.split("/");

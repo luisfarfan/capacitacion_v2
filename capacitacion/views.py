@@ -1,6 +1,4 @@
-from django.http import Http404
 from rest_framework.views import APIView
-from models import *
 from django.db.models import Count
 from django.http import JsonResponse
 from django.http import HttpResponse
@@ -8,6 +6,7 @@ from django.template import loader
 from serializer import *
 from rest_framework import generics
 from django.views.decorators.csrf import csrf_exempt
+
 
 def modulo_registro(request):
     template = loader.get_template('capacitacion/modulo_registro.html')
@@ -32,6 +31,15 @@ def asistencia(request):
     context = {
         'titulo_padre': 'Capacitacion',
         'titulo_hijo': 'Modulo de Asistencia'
+    }
+    return HttpResponse(template.render(context, request))
+
+
+def distribucion(request):
+    template = loader.get_template('capacitacion/distribucion.html')
+    context = {
+        'titulo_padre': 'Capacitacion',
+        'titulo_hijo': 'Modulo de Distribucion'
     }
     return HttpResponse(template.render(context, request))
 
@@ -65,7 +73,7 @@ class DistritosList(APIView):
 class ZonasList(APIView):
     def get(self, request, ubigeo):
         zonas = list(
-            Zona.objects.using('segmentacion').filter(UBIGEO=ubigeo).values('UBIGEO', 'ZONA').annotate(
+            Zona.objects.using('segmentacion').filter(UBIGEO=ubigeo).values('UBIGEO', 'ZONA', 'ETIQ_ZONA').annotate(
                 dcount=Count('UBIGEO', 'ZONA')))
         response = JsonResponse(zonas, safe=False)
         return response
@@ -77,6 +85,15 @@ class TbLocalByUbigeoViewSet(generics.ListAPIView):
     def get_queryset(self):
         ubigeo = self.kwargs['ubigeo']
         return Local.objects.filter(ubigeo=ubigeo)
+
+
+class TbLocalByZonaViewSet(generics.ListAPIView):
+    serializer_class = LocalAulasSerializer
+
+    def get_queryset(self):
+        ubigeo = self.kwargs['ubigeo']
+        zona = self.kwargs['zona']
+        return Local.objects.filter(ubigeo=ubigeo, zona=zona)
 
 
 class TbLocalAmbienteByLocalViewSet(generics.ListAPIView):
@@ -142,3 +159,54 @@ class CursoCriteriobyCursoViewSet(generics.ListAPIView):
         return CursoCriterio.objects.filter(id_curso=id_curso)
 
 
+class PEA_BY_AULAViewSet(viewsets.ModelViewSet):
+    queryset = LocalAmbiente.objects.all()
+    serializer_class = PEA_BY_AULASerializer
+
+
+@csrf_exempt
+def sobrantes_zona(request):
+    if request.method == "POST" and request.is_ajax():
+        ubigeo = request.POST['ubigeo']
+        zona = request.POST['zona']
+        sobrantes = PEA.objects.exclude(id_pea__in=PEA_AULA.objects.values('id_pea')).filter(ubigeo=ubigeo,
+                                                                                             zona=zona).order_by(
+            'ape_paterno').values('dni', 'ape_paterno', 'ape_materno', 'nombre', 'cargo')
+        return JsonResponse(list(sobrantes), safe=False)
+
+    return JsonResponse({'msg': False})
+
+
+@csrf_exempt
+def asignar(request):
+    if request.method == "POST" and request.is_ajax():
+        ubigeo = request.POST['ubigeo']
+        zona = request.POST['zona']
+        locales_zona = Local.objects.filter(ubigeo=ubigeo, zona=zona)
+        for e in locales_zona:
+            aulas_by_local = LocalAmbiente.objects.filter(id_local=e.id_local)
+            for a in aulas_by_local:
+                if disponibilidad_aula(a.id_localambiente):
+                    pea_ubicar = PEA.objects.exclude(id_pea__in=PEA_AULA.objects.values('id_pea')).filter(ubigeo=ubigeo,
+                                                                                                          zona=zona).order_by(
+                        'ape_paterno')[:a.capacidad]
+                    for p in pea_ubicar:
+                        pea = PEA.objects.get(pk=p.id_pea)
+                        aula = LocalAmbiente.objects.get(pk=a.id_localambiente)
+                        pea_aula = PEA_AULA(id_pea=pea, id_localambiente=aula)
+                        pea_aula.save()
+
+        return JsonResponse({'msg': True})
+
+    return JsonResponse({'msg': False})
+
+
+def disponibilidad_aula(aula):
+    aula = LocalAmbiente.objects.get(pk=aula)
+    cantidad_asignada = PEA_AULA.objects.filter(id_localambiente=aula).count()
+    is_disponible = True
+
+    if cantidad_asignada >= aula.capacidad:
+        is_disponible = False
+
+    return is_disponible

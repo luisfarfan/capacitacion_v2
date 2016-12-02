@@ -17,14 +17,18 @@ from django.conf.urls import url, include
 from django.contrib import admin
 from capacitacion.views import *
 from capacitacion.urls import *
+from login.views import login, do_login
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^rest/', include(router.urls)),
-    url(r'^$', modulo_registro, name='modulo_registro'),
+    url(r'^$', login, name='login'),
+    url(r'^do_login/$', do_login),
+    url(r'^asignacion/$', asignar),
+    url(r'^sobrantes_zona/$', sobrantes_zona),
     url(r'^modulo_registro/$', modulo_registro, name='modulo_registro'),
     url(r'^cursos_evaluaciones/$', cursos_evaluaciones, name='cursos_evaluaciones'),
-    url(r'^asistencia/$', asistencia, name='asistencia'),
+    url(r'^distribucion/$', distribucion, name='distribucion'),
     url(r'^departamentos/$', DepartamentosList.as_view()),
     url(r'^provincias/(?P<ccdd>[0-9]+)/$', ProvinciasList.as_view()),
     url(r'^distritos/(?P<ccdd>[0-9]+)/(?P<ccpp>[0-9]+)/$',
@@ -34,6 +38,7 @@ urlpatterns = [
     url('^localambiente/(?P<id_local>.+)/$', TbLocalAmbienteByLocalViewSet.as_view()),
     url('^cursobyetapa/(?P<id_etapa>.+)/$', CursobyEtapaViewSet.as_view()),
     url('^cursocriteriobycurso/(?P<id_curso>.+)/$', CursoCriteriobyCursoViewSet.as_view()),
+    url('^localbyzona/(?P<ubigeo>[0-9]+)/(?P<zona>[0-9]+)/$', TbLocalByZonaViewSet.as_view()),
 
     # url('^localambiente/(?P<id_local>.+)/(?P<id_ambiente>.+)/$', LocalAmbienteByLocalAulaViewSet.as_view()),
 

@@ -24,6 +24,7 @@ class Zona(models.Model):
     ZONA = models.CharField(max_length=5)
     LLAVE_CCPP = models.CharField(max_length=10)
     LLAVE_ZONA = models.CharField(max_length=15)
+    ETIQ_ZONA = models.CharField(max_length=6)
 
     class Meta:
         managed = False
