@@ -229,3 +229,13 @@ class PEA_AULA(models.Model):
     class Meta:
         managed = True
         db_table = 'PEA_AULA'
+
+
+class PEA_ASISTENCIA(models.Model):
+    id_asistencia = models.AutoField(primary_key=True)
+    id_peaaula = models.ForeignKey('PEA_AULA')
+    marcacion = models.DateTimeField()
+
+    class Meta:
+        managed = True
+        db_table = 'PEA_ASISTENCIA'

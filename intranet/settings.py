@@ -80,6 +80,7 @@ WSGI_APPLICATION = 'intranet.wsgi.application'
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     },
 """
+"""
 DATABASES = {
     'default': {
         'ENGINE': 'sql_server.pyodbc',
@@ -97,6 +98,20 @@ DATABASES = {
         'USER': 'us_segmentacion_web',
         'PASSWORD': 'u$s3g*mentaWeB',
         'HOST': '172.18.1.41',
+        'OPTIONS': {
+            'driver': 'SQL Server',
+        },
+    },
+}
+"""
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'sql_server.pyodbc',
+        'NAME': 'CPV_CAPACITACION',
+        'USER': 'sa',
+        'PASSWORD': 'luis123',
+        'HOST': 'localhost',
         'OPTIONS': {
             'driver': 'SQL Server',
         },

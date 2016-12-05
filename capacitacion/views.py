@@ -6,6 +6,9 @@ from django.template import loader
 from serializer import *
 from rest_framework import generics
 from django.views.decorators.csrf import csrf_exempt
+from django.db.models import F
+from datetime import datetime
+import pandas as pd
 
 
 def modulo_registro(request):
@@ -73,7 +76,7 @@ class DistritosList(APIView):
 class ZonasList(APIView):
     def get(self, request, ubigeo):
         zonas = list(
-            Zona.objects.using('segmentacion').filter(UBIGEO=ubigeo).values('UBIGEO', 'ZONA', 'ETIQ_ZONA').annotate(
+            Zona.objects.filter(UBIGEO=ubigeo).values('UBIGEO', 'ZONA', 'ETIQ_ZONA').annotate(
                 dcount=Count('UBIGEO', 'ZONA')))
         response = JsonResponse(zonas, safe=False)
         return response
@@ -96,12 +99,11 @@ class TbLocalByZonaViewSet(generics.ListAPIView):
         return Local.objects.filter(ubigeo=ubigeo, zona=zona)
 
 
-class TbLocalAmbienteByLocalViewSet(generics.ListAPIView):
-    serializer_class = LocalAmbienteSerializer
-
-    def get_queryset(self):
-        id_local = self.kwargs['id_local']
-        return LocalAmbiente.objects.filter(id_local=id_local)
+def TbLocalAmbienteByLocalViewSet(request, id_local):
+    query = LocalAmbiente.objects.filter(id_local=id_local).order_by('-capacidad').annotate(
+        nombre_ambiente=F('id_ambiente__nombre_ambiente')).values(
+        'id_localambiente', 'numero', 'capacidad', 'nombre_ambiente')
+    return JsonResponse(list(query), safe=False)
 
 
 class LocalAmbienteByLocalAulaViewSet(generics.ListAPIView):
@@ -164,6 +166,11 @@ class PEA_BY_AULAViewSet(viewsets.ModelViewSet):
     serializer_class = PEA_BY_AULASerializer
 
 
+class PEA_ASISTENCIAViewSet(viewsets.ModelViewSet):
+    queryset = PEA_ASISTENCIA.objects.all()
+    serializer_class = PEA_ASISTENCIASerializer
+
+
 @csrf_exempt
 def sobrantes_zona(request):
     if request.method == "POST" and request.is_ajax():
@@ -184,11 +191,12 @@ def asignar(request):
         zona = request.POST['zona']
         locales_zona = Local.objects.filter(ubigeo=ubigeo, zona=zona)
         for e in locales_zona:
-            aulas_by_local = LocalAmbiente.objects.filter(id_local=e.id_local)
+            aulas_by_local = LocalAmbiente.objects.filter(id_local=e.id_local).order_by('-capacidad')
             for a in aulas_by_local:
                 if disponibilidad_aula(a.id_localambiente):
-                    pea_ubicar = PEA.objects.exclude(id_pea__in=PEA_AULA.objects.values('id_pea')).filter(ubigeo=ubigeo,
-                                                                                                          zona=zona).order_by(
+                    pea_ubicar = PEA.objects.exclude(id_pea__in=PEA_AULA.objects.values('id_pea')).filter(
+                        ubigeo=ubigeo, zona=zona,
+                        id_cargofuncional__in=Funcionario.objects.filter(id_curso=e.id_curso)).order_by(
                         'ape_paterno')[:a.capacidad]
                     for p in pea_ubicar:
                         pea = PEA.objects.get(pk=p.id_pea)
@@ -210,3 +218,10 @@ def disponibilidad_aula(aula):
         is_disponible = False
 
     return is_disponible
+
+
+def getRangeDatesLocal(request, id_local):
+    local = Local.objects.filter(pk=id_local).values('fecha_inicio', 'fecha_fin')
+    fecha_inicio = datetime.strptime(local.fecha_inicio, '%d/%m/%Y').strftime('%Y-%m-%d')
+    fecha_fin = datetime.strptime(local.fecha_fin, '%d/%m/%Y').strftime('%Y-%m-%d')
+    rango_fechas = pd.date_range(fecha_inicio,fecha_fin)

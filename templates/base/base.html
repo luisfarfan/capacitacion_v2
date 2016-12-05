@@ -26,6 +26,10 @@
             height: 580px;
         }
 
+        table {
+            font-size: 11px !important;
+        }
+
         fieldset {
             border: 1px groove #ddd !important;
             padding: 0 1.4em 1.4em 1.4em !important;
@@ -197,7 +201,13 @@
 
 </body>
 <script>
-    BASE_URL = `http://192.168.200.123:3000/`;
+    var pathArray = location.href.split('/');
+    var protocol = pathArray[0];
+    var host = pathArray[2];
+    BASEURL = protocol + '//' + host;
+    BASE_URL = protocol + '//' + host + '/';
+    session = JSON.parse(localStorage.getItem('usuario'));
+
     function setSelect(id, json, select2 = false) {
         $('#' + id).find('option').remove();
         let html = '';

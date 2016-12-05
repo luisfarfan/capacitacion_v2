@@ -1,11 +1,6 @@
 /**
  * Created by LFarfan on 01/12/2016.
  */
-var pathArray = location.href.split('/');
-var protocol = pathArray[0];
-var host = pathArray[2];
-BASEURL = protocol + '//' + host;
-session = JSON.parse(localStorage.getItem('usuario'));
 
 //Document on ready -------------
 $(function () {
@@ -46,7 +41,8 @@ function getAmbientes(id_local) {
         url: `${BASEURL}/localambiente/${id_local}/`,
         type: 'GET',
         success: response => {
-            setTable('tabla_detalle_ambientes', response, ['numero', 'capacidad', 'id_ambiente', {pk: 'id_localambiente'}])
+            console.log(response);
+            setTable('tabla_detalle_ambientes', response, ['numero', 'capacidad', 'nombre_ambiente', {pk: 'id_localambiente'}]);
         },
         error: error => {
             console.log('ERROR!!', error);
@@ -60,7 +56,8 @@ function getPEA(id_ambiente) {
         url: `${BASEURL}/rest/pea_aula/${id_ambiente}/`,
         type: 'GET',
         success: response => {
-            setTable('tabla_pea', response.pea, ['dni', 'ape_paterno', 'ape_materno', 'nombre']);
+            console.log(response)
+            setTable('tabla_pea', response.pea, ['dni', 'ape_paterno', 'ape_materno', 'nombre', 'cargo']);
         },
         error: error => {
             console.log('ERROR!!', error)

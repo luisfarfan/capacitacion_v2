@@ -49,3 +49,8 @@ class PEA_BY_AULASerializer(serializers.ModelSerializer):
 
     class Meta:
         model = LocalAmbiente
+
+
+class PEA_ASISTENCIASerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PEA_ASISTENCIA

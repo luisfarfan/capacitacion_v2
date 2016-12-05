@@ -12,9 +12,10 @@
         <li>
             <a href="#"><i class="icon-stack"></i> <span>Capacitación</span></a>
             <ul>
-                <li class="active"><a href="http://192.168.200.123:3000/modulo_registro">Modulo de Registro de Local</a>
+                <li class="active"><a href="{% url 'modulo_registro' %}">Modulo de Registro de Local</a>
                 </li>
-                <li><a href="http://192.168.200.123:3000/distribucion">Modulo Distribucion de PEA</a></li>
+                <li><a href="{% url 'distribucion' %}">Modulo Distribucion de PEA</a></li>
+                <li><a href="{% url 'asistencia' %}">Modulo de Asistencia</a></li>
             </ul>
         </li>
         <!-- /main -->

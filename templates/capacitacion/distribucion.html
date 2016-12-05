@@ -8,9 +8,10 @@
         <li>
             <a href="#"><i class="icon-stack"></i> <span>Capacitación</span></a>
             <ul>
-                <li><a href="http://192.168.200.123:3000/modulo_registro">Modulo de Registro</a></li>
-                <li class="active"><a href="http://192.168.200.123:3000/distribucion">Modulo Distribucion de PEA</a>
+                <li><a href="{% url 'modulo_registro' %}">Modulo de Registro de Local</a>
                 </li>
+                <li class="active"><a href="{% url 'distribucion' %}">Modulo Distribucion de PEA</a></li>
+                <li><a href="{% url 'asistencia' %}">Modulo de Asistencia</a></li>
             </ul>
         </li>
         <!-- /main -->
@@ -48,7 +49,7 @@
             </div>
         </div>
     </div>
-    <div class="col-md-4">
+    <div class="col-md-5">
         <div class="panel panel-flat">
             <div class="panel-heading">
                 <h5 class="panel-title">Detalle Ambientes por Local</h5>
@@ -65,25 +66,28 @@
             </div>
             <div class="panel-body">
                 <div class="row">
-                    <table id="tabla_detalle_ambientes" class="table table-responsive table-bordered">
-                        <thead>
-                        <tr>
-                            <th>N°</th>
-                            <th>Número Ambiente</th>
-                            <th>Capacidad</th>
-                            <th>Tipo Ambiente</th>
-                            <th></th>
-                        </tr>
-                        </thead>
-                        <tbody>
+                    <div class="table-responsive">
+                        <table id="tabla_detalle_ambientes" class="table table-bordered">
+                            <thead>
+                            <tr>
+                                <th>N°</th>
+                                <th>Número Ambiente</th>
+                                <th>Capacidad</th>
+                                <th>Ambiente</th>
+                                <th></th>
+                            </tr>
+                            </thead>
+                            <tbody>
 
-                        </tbody>
-                    </table>
+                            </tbody>
+                        </table>
+                    </div>
+
                 </div>
             </div>
         </div>
     </div>
-    <div class="col-md-8">
+    <div class="col-md-7">
         <div class="panel panel-flat">
             <div class="panel-heading">
                 <h5 class="panel-title">PEA por Aula</h5>
@@ -109,6 +113,7 @@
                                 <th>Apellido Paterno</th>
                                 <th>Apellido Materno</th>
                                 <th>Nombres</th>
+                                <th>Cargo</th>
                             </tr>
                             </thead>
                             <tbody>
