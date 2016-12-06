@@ -233,8 +233,10 @@ class PEA_AULA(models.Model):
 
 class PEA_ASISTENCIA(models.Model):
     id_asistencia = models.AutoField(primary_key=True)
-    id_peaaula = models.ForeignKey('PEA_AULA')
-    marcacion = models.DateTimeField()
+    id_peaaula = models.ForeignKey('PEA_AULA', related_name='peaaulas')
+    fecha = models.CharField(max_length=20, blank=True, null=True)
+    turno_manana = models.IntegerField(blank=True, null=True)
+    turno_tarde = models.IntegerField(blank=True, null=True)
 
     class Meta:
         managed = True

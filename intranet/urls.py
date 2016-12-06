@@ -40,6 +40,9 @@ urlpatterns = [
     url('^cursobyetapa/(?P<id_etapa>.+)/$', CursobyEtapaViewSet.as_view()),
     url('^cursocriteriobycurso/(?P<id_curso>.+)/$', CursoCriteriobyCursoViewSet.as_view()),
     url('^localbyzona/(?P<ubigeo>[0-9]+)/(?P<zona>[0-9]+)/$', TbLocalByZonaViewSet.as_view()),
+    url('^getRangeDatesLocal/(?P<id_local>.+)/$', getRangeDatesLocal),
+    url('^getPeaAsistencia/$', getPeaAsistencia),
+    url('^peaaulabylocalambiente/(?P<id_localambiente>.+)/$', PEA_AULAbyLocalAmbienteViewSet.as_view()),
 
     # url('^localambiente/(?P<id_local>.+)/(?P<id_ambiente>.+)/$', LocalAmbienteByLocalAulaViewSet.as_view()),
 

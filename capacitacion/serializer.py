@@ -54,3 +54,11 @@ class PEA_BY_AULASerializer(serializers.ModelSerializer):
 class PEA_ASISTENCIASerializer(serializers.ModelSerializer):
     class Meta:
         model = PEA_ASISTENCIA
+
+
+class PEA_AULASerializer(serializers.ModelSerializer):
+    peaaulas = PEA_ASISTENCIASerializer(many=True, read_only=True)
+    id_pea = PEASerializer()
+
+    class Meta:
+        model = PEA_AULA

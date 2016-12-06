@@ -17,7 +17,6 @@ def login(request):
 
 @csrf_exempt
 def do_login(request):
-    print 'hola'
     if request.method == "POST" and request.is_ajax():
         usuario = request.POST['usuario']
         clave = request.POST['clave']

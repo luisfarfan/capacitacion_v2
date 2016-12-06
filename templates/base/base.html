@@ -222,8 +222,13 @@
         $('#' + id).find('option').remove();
 
         let html = '<option>Seleccione</option>';
+
         $.each(json, function (key, val) {
-            html += `<option value="${val[keys[0]]}">${val[keys[1]]}</option>`
+            if (typeof val == 'string') {
+                html += `<option value="${val}">${val}</option>`
+            } else {
+                html += `<option value="${val[keys[0]]}">${val[keys[1]]}</option>`
+            }
         });
         $('#' + id).html(html);
         select2 ? $('#' + id).select2() : '';
@@ -236,18 +241,23 @@
             ('#' + id).DataTable({datatable_params})
             ('#' + id).dataTable().fnDestroy();
         }
-        $.each(json, (key, val)=> {
-            html += '<tr>';
-            html += `<td>${key + 1}</td>`;
-            for (let i in params) {
-                if (params[i].pk) {
-                    html += `<td><button onclick="getPEA(${val[params[i].pk]})" type="button">PEA</button></td>`;
-                } else {
-                    html += `<td>${val[params[i]]}</td>`;
+        if (json.html) {
+            html = json.html;
+        } else {
+            $.each(json, (key, val)=> {
+                html += '<tr>';
+                html += `<td>${key + 1}</td>`;
+                for (let i in params) {
+                    if (params[i].pk) {
+                        html += `<td><button onclick="getPEA(${val[params[i].pk]})" type="button">PEA</button></td>`;
+                    } else {
+                        html += `<td>${val[params[i]]}</td>`;
+                    }
                 }
-            }
-            html += '</tr>';
-        });
+                html += '</tr>';
+            });
+        }
+
         $('#' + id).find('tbody').html(html);
 
         if (datatable) {

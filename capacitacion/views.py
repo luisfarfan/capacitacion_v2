@@ -1,5 +1,5 @@
 from rest_framework.views import APIView
-from django.db.models import Count
+from django.db.models import Count, Value
 from django.http import JsonResponse
 from django.http import HttpResponse
 from django.template import loader
@@ -9,6 +9,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.db.models import F
 from datetime import datetime
 import pandas as pd
+from django.db.models.functions import Concat
 
 
 def modulo_registro(request):
@@ -171,6 +172,19 @@ class PEA_ASISTENCIAViewSet(viewsets.ModelViewSet):
     serializer_class = PEA_ASISTENCIASerializer
 
 
+class PEA_AULAViewSet(viewsets.ModelViewSet):
+    queryset = PEA_AULA.objects.all()
+    serializer_class = PEA_AULASerializer
+
+
+class PEA_AULAbyLocalAmbienteViewSet(generics.ListAPIView):
+    serializer_class = PEA_AULASerializer
+
+    def get_queryset(self):
+        id_localambiente = self.kwargs['id_localambiente']
+        return PEA_AULA.objects.filter(id_localambiente=id_localambiente)
+
+
 @csrf_exempt
 def sobrantes_zona(request):
     if request.method == "POST" and request.is_ajax():
@@ -220,8 +234,33 @@ def disponibilidad_aula(aula):
     return is_disponible
 
 
+"""
+TURNO
+0 = MANANA
+1 = TARDE
+2 = TOOD EL DIA
+"""
+
+
 def getRangeDatesLocal(request, id_local):
-    local = Local.objects.filter(pk=id_local).values('fecha_inicio', 'fecha_fin')
-    fecha_inicio = datetime.strptime(local.fecha_inicio, '%d/%m/%Y').strftime('%Y-%m-%d')
-    fecha_fin = datetime.strptime(local.fecha_fin, '%d/%m/%Y').strftime('%Y-%m-%d')
-    rango_fechas = pd.date_range(fecha_inicio,fecha_fin)
+    format_fechas = []
+    local = Local.objects.filter(pk=id_local).values('fecha_inicio', 'fecha_fin', 'turno_uso_local')
+    fecha_inicio = datetime.strptime(local[0]['fecha_inicio'], '%d/%m/%Y').strftime('%Y-%m-%d')
+    fecha_fin = datetime.strptime(local[0]['fecha_fin'], '%d/%m/%Y').strftime('%Y-%m-%d')
+    rango_fechas = pd.Series(pd.date_range(fecha_inicio, fecha_fin).format())
+    for f in rango_fechas:
+        format_fechas.append(datetime.strptime(f, '%Y-%m-%d').strftime('%d/%m/%Y'))
+
+    return JsonResponse({'fechas': format_fechas, 'turno': local[0]['turno_uso_local']}, safe=False)
+
+
+def getPeaAsistencia(request):
+    id_localambiente = request.POST['id_localambiente']
+    fecha = request.POST['fecha']
+    pea = PEA_AULA.objects.filter(id_localambiente=id_localambiente).annotate(
+        nombre_completo=Concat(
+            'id_pea__ape_paterno', Value(' '), 'id_pea__ape_materno', Value(' '), 'id_pea__nombre'),
+        cargo=F('id_pea__cargo')).values('nombre_completo', 'cargo', 'id_pea__pea_aula__pea_asistencia__turno_manana',
+                                         'id_pea__pea_aula__pea_asistencia__turno_tarde')
+
+    return JsonResponse(list(pea), safe=False)

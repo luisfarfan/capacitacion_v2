@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'pandas',
     'intranetapp',
     'capacitacion',
     'login',
@@ -80,7 +81,6 @@ WSGI_APPLICATION = 'intranet.wsgi.application'
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     },
 """
-"""
 DATABASES = {
     'default': {
         'ENGINE': 'sql_server.pyodbc',
@@ -103,8 +103,8 @@ DATABASES = {
         },
     },
 }
-"""
 
+"""
 DATABASES = {
     'default': {
         'ENGINE': 'sql_server.pyodbc',
@@ -117,7 +117,7 @@ DATABASES = {
         },
     },
 }
-
+"""
 # Password validation
 # https://docs.djangoproject.com/en/1.10/ref/settings/#auth-password-validators
 
