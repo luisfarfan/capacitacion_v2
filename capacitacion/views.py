@@ -10,6 +10,7 @@ from django.db.models import F
 from datetime import datetime
 import pandas as pd
 from django.db.models.functions import Concat
+import json
 
 
 def modulo_registro(request):
@@ -172,9 +173,12 @@ class PEA_ASISTENCIAViewSet(viewsets.ModelViewSet):
     serializer_class = PEA_ASISTENCIASerializer
 
 
-class PEA_AULAViewSet(viewsets.ModelViewSet):
-    queryset = PEA_AULA.objects.all()
+class PEA_AULAViewSet(generics.ListAPIView):
     serializer_class = PEA_AULASerializer
+
+    def get_queryset(self):
+        id_localambiente = self.kwargs['id_localambiente']
+        return PEA_AULA.objects.filter(id_localambiente=id_localambiente)
 
 
 class PEA_AULAbyLocalAmbienteViewSet(generics.ListAPIView):
@@ -264,3 +268,17 @@ def getPeaAsistencia(request):
                                          'id_pea__pea_aula__pea_asistencia__turno_tarde')
 
     return JsonResponse(list(pea), safe=False)
+
+
+@csrf_exempt
+def save_asistencia(request):
+    if request.method == "POST" and request.is_ajax():
+        data = json.loads(request.body)
+
+        for i in data:
+            pea_asistencia = PEA_ASISTENCIA(fecha=i['fecha'], turno_manana=i['turno_manana'],
+                                            turno_tarde=i['turno_tarde'],
+                                            id_peaaula=PEA_AULA.objects.get(pk=i['id_peaaula']))
+            pea_asistencia.save()
+
+        return JsonResponse({'msg': True})
