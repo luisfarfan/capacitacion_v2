@@ -10,6 +10,7 @@ from django.db.models import F
 from datetime import datetime
 import pandas as pd
 from django.db.models.functions import Concat
+from django.core.exceptions import ObjectDoesNotExist
 import json
 
 
@@ -276,9 +277,22 @@ def save_asistencia(request):
         data = json.loads(request.body)
 
         for i in data:
-            pea_asistencia = PEA_ASISTENCIA(fecha=i['fecha'], turno_manana=i['turno_manana'],
-                                            turno_tarde=i['turno_tarde'],
-                                            id_peaaula=PEA_AULA.objects.get(pk=i['id_peaaula']))
-            pea_asistencia.save()
+            try:
+                pea = PEA_ASISTENCIA.objects.get(fecha=i['fecha'],
+                                                 id_peaaula=PEA_AULA.objects.get(pk=i['id_peaaula']))
+            except ObjectDoesNotExist:
+                pea = None
 
-        return JsonResponse({'msg': True})
+            if pea is None:
+                pea_asistencia = PEA_ASISTENCIA(fecha=i['fecha'], turno_manana=i['turno_manana'],
+                                                turno_tarde=i['turno_tarde'],
+                                                id_peaaula=PEA_AULA.objects.get(pk=i['id_peaaula']))
+                pea_asistencia.save()
+            else:
+                pea_asistencia = PEA_ASISTENCIA.objects.get(fecha=i['fecha'],
+                                                            id_peaaula=PEA_AULA.objects.get(pk=i['id_peaaula']))
+                pea_asistencia.turno_tarde = i['turno_tarde']
+                pea_asistencia.turno_manana = i['turno_manana']
+                pea_asistencia.save()
+
+    return JsonResponse({'msg': True})

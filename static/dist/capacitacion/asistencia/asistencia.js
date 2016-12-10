@@ -207,6 +207,7 @@ function saveAsistencia() {
     let fecha_selected = $('#fechas').val();
     let div_data = tabla_pea.$('div[name="m' + fecha_selected + '"]');
     let data = [];
+    let faltantes = 0;
     $.each(div_data, (key, val)=> {
         let turno_manana = $(val).find('input[name^="turno_manana"]:checked').val();
         let id_peaaula = $(val).find(`input[name^="id_peaaula"]`).val();
@@ -221,16 +222,40 @@ function saveAsistencia() {
                 id_peaaula: id_peaaula
             };
             data.push(json);
+        } else {
+            faltantes++;
         }
     });
-
-    $.ajax({
-        url: `${BASEURL}/save_asistencia/`,
-        type: 'POST',
-        data: JSON.stringify(data),
-        success: function (response) {
-            console.log(response);
+    let title = 'Asistencia Completa, Guardar?';
+    let type = 'success';
+    if (faltantes > 0) {
+        title = 'Aun tiene personas que ha marcado su asistencia, desea guardar?';
+        type = 'warning';
+    }
+    swal({
+        title: 'Guardar Asistencia',
+        text: title,
+        type: type,
+        showCancelButton: true,
+        confirmButtonColor: "#EF5350",
+        confirmButtonText: "Si!",
+        cancelButtonText: "No!",
+        closeOnConfirm: true,
+        closeOnCancel: true,
+        showLoaderOnConfirm: true
+    }, confirm => {
+        if (confirm) {
+            $.ajax({
+                url: `${BASEURL}/save_asistencia/`,
+                type: 'POST',
+                data: JSON.stringify(data),
+                success: function (response) {
+                    swal({
+                        title: "Asistencia Guardada con éxito!",
+                        confirmButtonColor: "#2196F3"
+                    });
+                }
+            });
         }
-    })
-    return data;
+    });
 }
